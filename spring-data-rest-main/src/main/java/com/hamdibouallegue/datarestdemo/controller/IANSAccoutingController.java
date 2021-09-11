@@ -152,7 +152,7 @@ public class IANSAccoutingController {
 	   	   try {
 
 	   	          LocalDate fifteenDaysAfterDateFromCurrent = LocalDate.now().plusDays(15);
-	   	          List<IansInvoice> invoices = iansInvoiceRepository.findAllWithDateAfter(Date.from(fifteenDaysAfterDateFromCurrent.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+	   	          List<IansInvoice> invoices = iansInvoiceRepository.findBySubscriptionDateBetween(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),Date.from(fifteenDaysAfterDateFromCurrent.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 			
 	   				   
 	   				   if(invoices!=null)

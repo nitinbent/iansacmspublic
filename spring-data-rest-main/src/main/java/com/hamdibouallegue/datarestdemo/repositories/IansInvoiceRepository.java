@@ -15,7 +15,9 @@ public interface IansInvoiceRepository extends JpaRepository<IansInvoice, Intege
 	
 	
     //@Query("select m from IansInvoice m where subscriptionDate >= :fifteenDaysAfterDateFromCurrent")
-    @Query("select m from IansInvoice m where subscriptionDate >=now() and subscriptionDate >= :fifteenDaysAfterDateFromCurrent")
+    @Query("select m from IansInvoice m where subscriptionDate between CURRENT_DATE and :fifteenDaysAfterDateFromCurrent")
     List<IansInvoice> findAllWithDateAfter(@Param("fifteenDaysAfterDateFromCurrent") Date fifteenDaysAfterDateFromCurrent);
 
+    List<IansInvoice> findBySubscriptionDateBetween(Date startDate, Date fifteenDaysAfterDateFromCurrent);
+    
 }
