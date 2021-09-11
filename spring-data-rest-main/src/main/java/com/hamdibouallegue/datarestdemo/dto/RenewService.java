@@ -10,7 +10,7 @@ public class RenewService implements Serializable{
 	private static final long serialVersionUID = 9184335940577795376L;
 
 	private Integer invoiceId;
-	//private String customerName;
+	private String customerName;
 	private Integer customerId;
 	private String createdBy;
 	private Float totalAmount;
@@ -101,6 +101,12 @@ public class RenewService implements Serializable{
 	}
 	public void setSubscriptionValue(String subscriptionValue) {
 		this.subscriptionValue = subscriptionValue;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 

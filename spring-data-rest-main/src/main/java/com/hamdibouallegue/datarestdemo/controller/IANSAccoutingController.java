@@ -4,7 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hamdibouallegue.datarestdemo.dto.CreateInvoice;
 import com.hamdibouallegue.datarestdemo.dto.LoginRequest;
+import com.hamdibouallegue.datarestdemo.dto.RenewInvoice;
 import com.hamdibouallegue.datarestdemo.dto.UpdateInvoice;
 import com.hamdibouallegue.datarestdemo.models.IansCity;
 import com.hamdibouallegue.datarestdemo.models.IansInvoice;
@@ -142,25 +146,31 @@ public class IANSAccoutingController {
 	   	   	 
 	       }
 	 
-			/*
-			 * @GetMapping(value = "/getRenewInvoices",produces =
-			 * MediaType.APPLICATION_JSON_VALUE) public ResponseEntity<Object>
-			 * getRenewInvoices() {
-			 * 
-			 * try {
-			 * 
-			 * List<IansInvoice> invoices = iansInvoiceRepository.findAll();
-			 * 
-			 * if(invoices!=null) { return ResponseEntity.ok().body(invoices); } else {
-			 * return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-			 * body("{\"status\":\"No Invoices found\"}"); }
-			 * 
-			 * } catch (Exception e) { e.printStackTrace(); return
-			 * ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-			 * }
-			 * 
-			 * }
-			 */
+	 @GetMapping(value = "/getRenewInvoices",produces = MediaType.APPLICATION_JSON_VALUE)
+	   	public ResponseEntity<Object> getRenewInvoices() {
+	   	 
+	   	   try {
+
+	   	          LocalDate fifteenDaysAfterDateFromCurrent = LocalDate.now().plusDays(15);
+	   	          List<IansInvoice> invoices = iansInvoiceRepository.findAllWithDateAfter(Date.from(fifteenDaysAfterDateFromCurrent.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+			
+	   				   
+	   				   if(invoices!=null)
+	   				   {
+	   				      return ResponseEntity.ok().body(invoices);
+	   				   }
+	   				   else
+	   				   {
+						  return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"status\":\"No Invoices found\"}");
+	   				   }
+	   	
+	   	} 	
+	    catch (Exception e) {
+	   		e.printStackTrace();
+	   		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+	   	}
+	   	   	 
+	       }
 	 
 	 
 	@PostMapping(value = "/login",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -213,7 +223,7 @@ public class IANSAccoutingController {
 	 		   invoice.setIgstAmount(createInvoice.getTotalIGSTAmount());
 	 		   invoice.setTotalAmount(createInvoice.getTotalAmount());
 	 		   invoice.setCustomerName(createInvoice.getCustomerName());
-	 		   invoice.setSubscriptionDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getSubscriptionDate()));
+	 		   invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(createInvoice.getSubscriptionDate()));
 	 		   
 	 		   
 	 		   
@@ -276,6 +286,60 @@ public class IANSAccoutingController {
 	 	   
 	   }
 	   
+	   
+	   
+	   @PostMapping(value = "/doRenewInvoice",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	 	public ResponseEntity<Object> doRenewInvoice(@RequestBody RenewInvoice renewInvoice) {
+	 	 
+	 	   try {
+	 		   
+	 		   for (int i = 0; i < renewInvoice.getRenewServices().size(); i++) 
+	 		   {
+				
+		 		   IansInvoice invoice = new IansInvoice();
+		 		   invoice.setCreatedBy(renewInvoice.getRenewServices().get(i).getCreatedBy());
+		 		   invoice.setCgstAmount(renewInvoice.getRenewServices().get(i).getTotalCGSTAmount());
+		 		   invoice.setSgstAmount(renewInvoice.getRenewServices().get(i).getTotalSGSTAmount());
+		 		   invoice.setIgstAmount(renewInvoice.getRenewServices().get(i).getTotalIGSTAmount());
+		 		   invoice.setTotalAmount(renewInvoice.getRenewServices().get(i).getTotalAmount());
+		 		   invoice.setCustomerName(renewInvoice.getRenewServices().get(i).getCustomerName());
+		 		   invoice.setInvoiceId(renewInvoice.getRenewServices().get(i).getInvoiceId());
+
+		 		   LocalDate invoiceSubscriptionOldDate = new SimpleDateFormat("YYYY-MM-DD").parse(renewInvoice.getRenewServices().get(i).getSubscriptionDate()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		 			    
+		 		   LocalDate subscriptionMonths = invoiceSubscriptionOldDate.plusMonths(Integer.parseInt(renewInvoice.getRenewServices().get(i).getSubscriptionValue()));
+
+		 		   invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+		 		   
+		 		   //Put Invoice from invoice table itself.
+		 		  // invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+invoice.getCustomerId());
+		 		  // invoice.setIsPaid("0");
+		 		 //  invoice.setIansCustomeId(updateInvoice.getCustomerId());
+		 		   
+		 		  invoice.setIansServiceId(renewInvoice.getRenewServices().get(i).getServiceId());
+		 		  invoice.setServiceDescription(renewInvoice.getRenewServices().get(i).getServiceDescription());
+		 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getStartDate())); 
+		 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getEndDate()));
+
+		 		  invoice = iansInvoiceRepository.save(invoice);
+
+	 			   
+			   }
+	 		   
+
+				return ResponseEntity.status(HttpStatus.CREATED).body("");
+	 	
+	 	   
+	 	   }
+	 	   
+	 	  catch (Exception e) {
+	 	 		e.printStackTrace();
+	 	 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+	 	 	}
+	 	   
+	   }
+	   
+	   
 	   @DeleteMapping(value = "/deleteInvoice",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
 	   //@CrossOrigin(origins = "*")
 	   	public ResponseEntity<Object> deleteInvoice(@RequestParam Integer invoiceId) {
@@ -307,7 +371,7 @@ public class IANSAccoutingController {
 	 		   invoice.setTotalAmount(updateInvoice.getTotalAmount());
 	 		  //invoice.setCustomerName(updateInvoice.getCustomerName());
 	 		   invoice.setInvoiceId(updateInvoice.getInvoiceId());
-	 		   invoice.setSubscriptionDate(new SimpleDateFormat("dd/MM/yyyy").parse(updateInvoice.getSubscriptionDate()));
+	 		   invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(updateInvoice.getSubscriptionDate()));
 	 		   
 	 		   //Put Invoice from invoice table itself.
 	 		  // invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+invoice.getCustomerId());
