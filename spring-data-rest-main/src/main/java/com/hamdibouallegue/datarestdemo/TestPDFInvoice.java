@@ -1,5 +1,6 @@
 package com.hamdibouallegue.datarestdemo;
 
+import com.hamdibouallegue.datarestdemo.utils.NumberInWords;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -65,6 +66,8 @@ public class TestPDFInvoice {
 		 
 		 float [] pointColumnWidths3 = {40f, 345f, 100f}; 		
 		 Table table3 = new Table(pointColumnWidths3);
+		 
+		 
 		
 		  Cell headerColumn1 = new Cell();       
 		  headerColumn1.add("S. NO."); 
@@ -100,29 +103,28 @@ public class TestPDFInvoice {
 		  table3.addCell("2");		
 	      
 	      Cell column5 = new Cell();       
-	      column5.add("DESCRIPTION"); 
-	      table3.addCell("SUBSCRIPTION CHARGES FOR \"IANS ENGLISH NEWS SREVICE\n"
-	      		+ "FOR THE PERIOD OF 1 ST JULY 2021 TO 31 ST JULY 2021 \n SAC CODE – 998443").setFontSize(10);		
+	      column5.add("TAXABLE VALUE \nCGST @ 9% \nSGST @ 9% \nIGST @ 18%"); 
+	      table3.addCell("TAXABLE VALUE \nCGST@9% \nSGST@9% \nIGST@18%").setFontSize(10);	
 	      
-	 	
-	      Cell column6 = new Cell();       
-	      column6.add("Amount"); 
-		  table3.addCell("150.00");	
+	    
+	      Cell column10 = new Cell();       
+	      column10.add("Amount"); 
+		  table3.addCell("3,959.00");	
 		  
 		  
-		  Cell column7 = new Cell();       
-		  column7.add("S. NO."); 
-		  table3.addCell("3");		
+		  Cell column11 = new Cell();       
+		  column11.add("Amt in words"); 
+		  table3.addCell("Amt in words").setFontSize(6);		
 	      
-	      Cell column8 = new Cell();       
-	      column8.add("DESCRIPTION"); 
-	      table3.addCell("SUBSCRIPTION CHARGES FOR \"IANS ENGLISH NEWS SREVICE\n"
-	      		+ "FOR THE PERIOD OF 1 ST JULY 2021 TO 31 ST JULY 2021 \n SAC CODE – 998443").setFontSize(10);		
+	      Cell column12 = new Cell();       
+	      column12.add("NumberInWords"); 
+	      table3.addCell("Rs "+NumberInWords.convertNumberToWords(25954)).setFontSize(12);	
 	      
-	 	
-	      Cell column9 = new Cell();       
-	      column9.add("Amount"); 
-		  table3.addCell("150.00");	
+	    
+	      Cell column13 = new Cell();       
+	      column13.add("Amount"); 
+		  table3.addCell("25,954.00");	
+		  
 	      
 	      
 	      Cell cellnewtab1 = new Cell();       
