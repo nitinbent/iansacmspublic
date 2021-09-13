@@ -238,7 +238,15 @@ public class IANSAccoutingController {
 	 		   invoice.setTotalAmount(createInvoice.getTotalAmount());
 	 		   invoice.setCustomerName(createInvoice.getCustomerName());
 	 		   invoice.setSacCode(createInvoice.getSacCode());
-	 		   invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(createInvoice.getSubscriptionDate()));
+	 		   
+	 		  
+	 		   LocalDate invoiceSubscriptionOldDate = LocalDate.now();
+			    
+	 		   LocalDate subscriptionMonths = invoiceSubscriptionOldDate.plusMonths(1);
+
+	 		   invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+   
+	 		   //invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(createInvoice.getSubscriptionDate()));
 	 		   
 	 		   
 	 		   
@@ -283,7 +291,7 @@ public class IANSAccoutingController {
 				 */
 	 		   
 	 		   if(invoice.getInvoiceId()!=0) {
-				      return ResponseEntity.status(HttpStatus.CREATED).body(invoice.getInvoiceId());
+				      return ResponseEntity.status(HttpStatus.CREATED).body(invoice.getInvoiceNo());
 	 		   }
 				      else
 				      {
