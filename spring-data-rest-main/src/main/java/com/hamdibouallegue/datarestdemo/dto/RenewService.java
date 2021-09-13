@@ -18,8 +18,8 @@ public class RenewService implements Serializable{
 	private Float totalSGSTAmount;
 	private Float totalIGSTAmount;
 	private String subscriptionDate;
-	private String startDate;
-	private String endDate;
+	private String serviceStartDate;
+	private String serviceEndDate;
 	private Integer serviceId;
 	private String subscriptionValue;
 	private String serviceDescription;
@@ -72,17 +72,18 @@ public class RenewService implements Serializable{
 	public void setSubscriptionDate(String subscriptionDate) {
 		this.subscriptionDate = subscriptionDate;
 	}
-	public String getStartDate() {
-		return startDate;
+	
+	public String getServiceStartDate() {
+		return serviceStartDate;
 	}
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
+	public void setServiceStartDate(String serviceStartDate) {
+		this.serviceStartDate = serviceStartDate;
 	}
-	public String getEndDate() {
-		return endDate;
+	public String getServiceEndDate() {
+		return serviceEndDate;
 	}
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
+	public void setServiceEndDate(String serviceEndDate) {
+		this.serviceEndDate = serviceEndDate;
 	}
 	public Integer getServiceId() {
 		return serviceId;

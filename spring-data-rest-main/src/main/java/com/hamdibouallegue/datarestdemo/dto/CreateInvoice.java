@@ -17,9 +17,10 @@ public class CreateInvoice implements Serializable{
 	private Float totalSGSTAmount;
 	private Float totalIGSTAmount;
 	private String subscriptionDate;
-	private String startDate;
-	private String endDate;
+	private String serviceStartDate;
+	private String serviceEndDate;
 	private Integer serviceId;
+	private String sacCode;
 	private String serviceDescription;
 
 	
@@ -66,17 +67,18 @@ public class CreateInvoice implements Serializable{
 	public void setSubscriptionDate(String subscriptionDate) {
 		this.subscriptionDate = subscriptionDate;
 	}
-	public String getStartDate() {
-		return startDate;
+	
+	public String getServiceStartDate() {
+		return serviceStartDate;
 	}
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
+	public void setServiceStartDate(String serviceStartDate) {
+		this.serviceStartDate = serviceStartDate;
 	}
-	public String getEndDate() {
-		return endDate;
+	public String getServiceEndDate() {
+		return serviceEndDate;
 	}
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
+	public void setServiceEndDate(String serviceEndDate) {
+		this.serviceEndDate = serviceEndDate;
 	}
 	public Integer getServiceId() {
 		return serviceId;
@@ -95,6 +97,12 @@ public class CreateInvoice implements Serializable{
 	}
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+	public String getSacCode() {
+		return sacCode;
+	}
+	public void setSacCode(String sacCode) {
+		this.sacCode = sacCode;
 	}
 
 }

@@ -234,6 +234,7 @@ public class IANSAccoutingController {
 	 		   invoice.setIgstAmount(createInvoice.getTotalIGSTAmount());
 	 		   invoice.setTotalAmount(createInvoice.getTotalAmount());
 	 		   invoice.setCustomerName(createInvoice.getCustomerName());
+	 		   invoice.setSacCode(createInvoice.getSacCode());
 	 		   invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(createInvoice.getSubscriptionDate()));
 	 		   
 	 		   
@@ -247,8 +248,8 @@ public class IANSAccoutingController {
 	 		   
 	 		  invoice.setIansServiceId(createInvoice.getServiceId());
 	 		  invoice.setServiceDescription(createInvoice.getServiceDescription());
-	 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getStartDate())); 
-	 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getEndDate()));
+	 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate())); 
+	 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceEndDate()));
 	 		   
 	 		   
 	 		   invoice = iansInvoiceRepository.save(invoice);
@@ -316,7 +317,7 @@ public class IANSAccoutingController {
 		 		   invoice.setCustomerName(renewInvoice.getRenewServices().get(i).getCustomerName());
 		 		   invoice.setInvoiceId(renewInvoice.getRenewServices().get(i).getInvoiceId());
 
-		 		   LocalDate invoiceSubscriptionOldDate = new SimpleDateFormat("YYYY-MM-DD").parse(renewInvoice.getRenewServices().get(i).getSubscriptionDate()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		 		   LocalDate invoiceSubscriptionOldDate = LocalDate.parse(renewInvoice.getRenewServices().get(i).getSubscriptionDate());
 		 			    
 		 		   LocalDate subscriptionMonths = invoiceSubscriptionOldDate.plusMonths(Integer.parseInt(renewInvoice.getRenewServices().get(i).getSubscriptionValue()));
 
@@ -329,8 +330,8 @@ public class IANSAccoutingController {
 		 		   
 		 		  invoice.setIansServiceId(renewInvoice.getRenewServices().get(i).getServiceId());
 		 		  invoice.setServiceDescription(renewInvoice.getRenewServices().get(i).getServiceDescription());
-		 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getStartDate())); 
-		 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getEndDate()));
+		 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getServiceStartDate())); 
+		 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getServiceEndDate()));
 
 		 		  invoice = iansInvoiceRepository.save(invoice);
 

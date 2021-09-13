@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 /**
  * The persistent class for the IANS_INVOICES database table.
@@ -66,9 +68,11 @@ public class IansInvoice implements Serializable {
 	private Date subscriptionDate;
 	
 	@Column(name="SERVICE_START_DATE")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date serviceStartDate;
 
 	@Column(name="SERVICE_END_DATE")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date serviceEndDate;
 	
 
@@ -94,6 +98,8 @@ public class IansInvoice implements Serializable {
 	@Column(name="CUSTOMER_NAME")
 	private String customerName;
 	
+	@Column(name="SAC_CODE")
+	private String sacCode;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="CUSTOMER_ID",insertable = false, updatable = false)
@@ -286,6 +292,14 @@ public class IansInvoice implements Serializable {
 
 	public void setIansCustomer(IansCustomer iansCustomer) {
 		this.iansCustomer = iansCustomer;
+	}
+
+	public String getSacCode() {
+		return sacCode;
+	}
+
+	public void setSacCode(String sacCode) {
+		this.sacCode = sacCode;
 	}
 
 	/*
