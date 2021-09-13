@@ -323,9 +323,9 @@ public class IANSAccoutingController {
 		 		   invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 		 		   
 		 		   //Put Invoice from invoice table itself.
-		 		  // invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+invoice.getCustomerId());
+		 		  invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+renewInvoice.getRenewServices().get(i).getCustomerId());
 		 		  // invoice.setIsPaid("0");
-		 		 //  invoice.setIansCustomeId(updateInvoice.getCustomerId());
+		 		  invoice.setIansCustomeId(renewInvoice.getRenewServices().get(i).getCustomerId());
 		 		   
 		 		  invoice.setIansServiceId(renewInvoice.getRenewServices().get(i).getServiceId());
 		 		  invoice.setServiceDescription(renewInvoice.getRenewServices().get(i).getServiceDescription());
@@ -810,9 +810,32 @@ public class IANSAccoutingController {
 		    
 		      Cell column10 = new Cell();       
 		      column10.add("Amount"); 
-			  table3.addCell(String.valueOf(generateInvoiceDTO.getTotalCGSTAmount()+generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount()));	
+		      
+		      Float totalGSTAmount = 0.0f;
+		      
+		      if(generateInvoiceDTO.getTotalCGSTAmount()!=null && generateInvoiceDTO.getTotalIGSTAmount()==null && generateInvoiceDTO.getTotalSGSTAmount()==null)
+		      {
+		    	  totalGSTAmount = generateInvoiceDTO.getTotalCGSTAmount();
+		      }
+		      
+		      else if(generateInvoiceDTO.getTotalCGSTAmount()!=null && generateInvoiceDTO.getTotalIGSTAmount()!=null && generateInvoiceDTO.getTotalSGSTAmount()==null)
+		      {
+		    	  totalGSTAmount = generateInvoiceDTO.getTotalCGSTAmount()+ generateInvoiceDTO.getTotalIGSTAmount();
+		      }
+		      
+		      else if(generateInvoiceDTO.getTotalCGSTAmount()!=null && generateInvoiceDTO.getTotalIGSTAmount()!=null && generateInvoiceDTO.getTotalSGSTAmount()!=null) {
+		    	  
+		    	  totalGSTAmount = generateInvoiceDTO.getTotalCGSTAmount()+ generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount();
+		      }
+		      
+		      else if(generateInvoiceDTO.getTotalCGSTAmount()==null && generateInvoiceDTO.getTotalIGSTAmount()!=null && generateInvoiceDTO.getTotalSGSTAmount()==null)
+		      {
+		    	  totalGSTAmount = generateInvoiceDTO.getTotalIGSTAmount();
+		      }
+		      
+			  table3.addCell(String.valueOf(totalGSTAmount));	
 			  
-			  Float totalInvoiceAmount = generateInvoiceDTO.getTotalAmount()+generateInvoiceDTO.getTotalCGSTAmount()+generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount();
+			  Float totalInvoiceAmount = generateInvoiceDTO.getTotalAmount()+totalGSTAmount;
 			  
 			  Cell column11 = new Cell();       
 			  column11.add("Amt in words"); 
