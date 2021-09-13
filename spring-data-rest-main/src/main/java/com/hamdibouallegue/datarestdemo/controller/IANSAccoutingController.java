@@ -3,7 +3,6 @@ package com.hamdibouallegue.datarestdemo.controller;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +19,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
@@ -28,11 +28,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hamdibouallegue.datarestdemo.dto.CreateInvoice;
@@ -62,6 +63,8 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 
 @RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class IANSAccoutingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(IANSAccoutingController.class);
@@ -352,9 +355,9 @@ public class IANSAccoutingController {
 	   }
 	   
 	   
-	   @DeleteMapping(value = "/deleteInvoice",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	   @DeleteMapping(value = "/deleteInvoice/{invoiceId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
 	   //@CrossOrigin(origins = "*")
-	   	public ResponseEntity<Object> deleteInvoice(@RequestParam Integer invoiceId) {
+	   	public ResponseEntity<Object> deleteInvoice(@PathParam("invoiceId") Integer invoiceId) {
 
 	   	   try {
 	   		
