@@ -363,7 +363,7 @@ public class IANSAccoutingController {
 	   }
 	   
 	   
-	   @DeleteMapping(value = "/deleteInvoice/{invoiceId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	   @GetMapping(value = "/deleteInvoice/{invoiceId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
 	   //@CrossOrigin(origins = "*")
 	   	public ResponseEntity<Object> deleteInvoice(@PathParam("invoiceId") Integer invoiceId) {
 
