@@ -31,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -240,15 +241,13 @@ public class IANSAccoutingController {
 	 		   invoice.setSacCode(createInvoice.getSacCode());
 	 		   
 	 		  
-	 		   LocalDate invoiceSubscriptionOldDate = LocalDate.now();
+	 		  // LocalDate invoiceSubscriptionOldDate = LocalDate.now();
 			    
-	 		   LocalDate subscriptionMonths = invoiceSubscriptionOldDate.plusMonths(1);
+	 		   //LocalDate subscriptionMonths = invoiceSubscriptionOldDate.plusMonths(1);
 
-	 		   invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+	 		   //invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
    
-	 		   //invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(createInvoice.getSubscriptionDate()));
-	 		   
-	 		   
+	 		   invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(createInvoice.getSubscriptionDate()));
 	 		   
 	 		   
 	 		   //Put Invoice from invoice table itself.
@@ -365,7 +364,7 @@ public class IANSAccoutingController {
 	   
 	   @GetMapping(value = "/deleteInvoice/{invoiceId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
 	   //@CrossOrigin(origins = "*")
-	   	public ResponseEntity<Object> deleteInvoice(@PathParam("invoiceId") Integer invoiceId) {
+	   	public ResponseEntity<Object> deleteInvoice(@PathVariable("invoiceId") Integer invoiceId) {
 
 	   	   try {
 	   		
