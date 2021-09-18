@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="IANS_SUBSCRIPTION")
-//@NamedQuery(name="IansSubscription.findAll", query="SELECT i FROM IANS_SUBSCRIPTION i")
+@NamedQuery(name="IansSubscription.findAll", query="SELECT i FROM IansSubscription i")
 public class IansSubscription implements Serializable {
 
 	/**

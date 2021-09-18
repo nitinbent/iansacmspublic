@@ -104,7 +104,7 @@ public class IansCustomer implements Serializable {
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="SUBSCRIPTION_ID")
-	private IansSubscription IansSubscription;
+	private IansSubscription iansSubscription;
 
 	/*
 	 * //bi-directional many-to-one association to IansInvoice
@@ -303,11 +303,13 @@ public class IansCustomer implements Serializable {
 	}
 
 	public IansSubscription getIansSubscription() {
-		return IansSubscription;
+		return iansSubscription;
 	}
 
 	public void setIansSubscription(IansSubscription iansSubscription) {
-		IansSubscription = iansSubscription;
+		this.iansSubscription = iansSubscription;
 	}
+
+	
 
 }
