@@ -44,10 +44,12 @@ import com.hamdibouallegue.datarestdemo.dto.LoginRequest;
 import com.hamdibouallegue.datarestdemo.dto.RenewInvoice;
 import com.hamdibouallegue.datarestdemo.dto.UpdateInvoice;
 import com.hamdibouallegue.datarestdemo.models.IansCity;
+import com.hamdibouallegue.datarestdemo.models.IansCustomer;
 import com.hamdibouallegue.datarestdemo.models.IansInvoice;
 import com.hamdibouallegue.datarestdemo.models.IansState;
 import com.hamdibouallegue.datarestdemo.models.UserPass;
 import com.hamdibouallegue.datarestdemo.repositories.IansCityRepository;
+import com.hamdibouallegue.datarestdemo.repositories.IansCustomerRepository;
 import com.hamdibouallegue.datarestdemo.repositories.IansInvoiceRepository;
 import com.hamdibouallegue.datarestdemo.repositories.IansStateRepository;
 import com.hamdibouallegue.datarestdemo.repositories.UserLoginRepository;
@@ -81,6 +83,9 @@ public class IANSAccoutingController {
 	 
 	 @Autowired
 	 IansInvoiceRepository iansInvoiceRepository;
+	 
+	 @Autowired
+	 IansCustomerRepository iansCustomerRepository;
 
 	 
 	 @GetMapping(value = "/getStates",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -136,6 +141,32 @@ public class IANSAccoutingController {
 	   	   	 
 	       }
 	 
+	 
+	 @GetMapping(value = "/getAllCustomers",produces = MediaType.APPLICATION_JSON_VALUE)
+	   	public ResponseEntity<Object> getAllCustomers() {
+	   	 
+	   	   try {
+	   		 
+
+	   				   
+	   		          List<IansCustomer> customers = iansCustomerRepository.findAll();
+	   				   
+	   				   if(customers!=null)
+	   				   {
+	   				      return ResponseEntity.ok().body(customers);
+	   				   }
+	   				   else
+	   				   {
+						  return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"status\":\"No Customer found\"}");
+	   				   }
+	   	
+	   	} 	
+	    catch (Exception e) {
+	   		e.printStackTrace();
+	   		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+	   	}
+	   	   	 
+	       }
 	 
 	 @GetMapping(value = "/getAllInvoices",produces = MediaType.APPLICATION_JSON_VALUE)
 	   	public ResponseEntity<Object> getAllInvoices() {

@@ -27,7 +27,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Entity
 @Table(name="IANS_CUSTOMERS")
-@NamedQuery(name="IansCustomer.findAll", query="SELECT i FROM IansCustomer i")
+//@NamedQuery(name="IansCustomer.findAll", query="SELECT i FROM IansCustomer i")
 public class IansCustomer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
