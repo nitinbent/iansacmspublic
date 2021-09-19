@@ -3,7 +3,6 @@ package com.hamdibouallegue.datarestdemo.controller;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,13 +12,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
@@ -29,12 +29,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hamdibouallegue.datarestdemo.dto.CreateInvoice;
@@ -321,7 +321,11 @@ public class IANSAccoutingController {
 				 */
 	 		   
 	 		   if(invoice.getInvoiceId()!=0) {
-				      return ResponseEntity.status(HttpStatus.CREATED).body(invoice.getInvoiceNo());
+	 			    
+	 			      Map<String,Object> map = new HashMap<>();
+	 			      map.put("invoiceNo", invoice.getInvoiceNo());
+                      return ResponseEntity.status(HttpStatus.CREATED).body(map);
+				    
 	 		   }
 				      else
 				      {
@@ -361,7 +365,8 @@ public class IANSAccoutingController {
 		 		   LocalDate invoiceSubscriptionOldDate = LocalDate.parse(renewInvoice.getRenewServices().get(i).getSubscriptionDate());
 		 			    
 		 		   LocalDate subscriptionMonths = invoiceSubscriptionOldDate.plusMonths(Integer.parseInt(renewInvoice.getRenewServices().get(i).getSubscriptionValue()));
-
+		 		  
+		 		   
 		 		   invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 		 		   
 		 		   //Put Invoice from invoice table itself.
@@ -393,7 +398,7 @@ public class IANSAccoutingController {
 	   }
 	   
 	   
-	   @GetMapping(value = "/deleteInvoice/{invoiceId}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	   @GetMapping(value = "/deleteInvoice/{invoiceId}")
 	   //@CrossOrigin(origins = "*")
 	   	public ResponseEntity<Object> deleteInvoice(@PathVariable("invoiceId") Integer invoiceId) {
 
@@ -411,77 +416,79 @@ public class IANSAccoutingController {
 	   	   	 
 	       }
 	   
-	   @PostMapping(value = "/updateInvoice",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	 	public ResponseEntity<Object> updateInvoice(@RequestBody UpdateInvoice updateInvoice) {
-	 	 
-	 	   try {
-	 		   
-	 		   IansInvoice invoice = new IansInvoice();
-	 		   invoice.setCreatedBy(updateInvoice.getCreatedBy());
-	 		   invoice.setCgstAmount(updateInvoice.getTotalCGSTAmount());
-	 		   invoice.setSgstAmount(updateInvoice.getTotalSGSTAmount());
-	 		   invoice.setIgstAmount(updateInvoice.getTotalIGSTAmount());
-	 		   invoice.setTotalAmount(updateInvoice.getTotalAmount());
-	 		  //invoice.setCustomerName(updateInvoice.getCustomerName());
-	 		   invoice.setInvoiceId(updateInvoice.getInvoiceId());
-	 		   invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(updateInvoice.getSubscriptionDate()));
-	 		   
-	 		   //Put Invoice from invoice table itself.
-	 		  // invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+invoice.getCustomerId());
-	 		  // invoice.setIsPaid("0");
-	 		 //  invoice.setIansCustomeId(updateInvoice.getCustomerId());
-	 		   
-	 		  invoice.setIansServiceId(updateInvoice.getServiceId());
-	 		  invoice.setServiceDescription(updateInvoice.getServiceDescription());
-	 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(updateInvoice.getStartDate())); 
-	 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(updateInvoice.getEndDate()));
-	 		   
-	 		   
-	 		   invoice = iansInvoiceRepository.save(invoice);
-	 		   
-				/*
-				 * if (invoice.getInvoiceId() != 0) { for (int i = 0; i <
-				 * createInvoice.getIansServices().size(); i++) {
-				 * 
-				 * IansInvoiceService iansInvoiceService = new IansInvoiceService();
-				 * iansInvoiceService.setCreatedBy(createInvoice.getIansServices().get(i).
-				 * getCreatedBy());
-				 * 
-				 * iansInvoiceService.setIansInvoiceId(invoice.getInvoiceId());
-				 * iansInvoiceService.setIansServiceId(createInvoice.getIansServices().get(i).
-				 * getServiceId()); iansInvoiceService
-				 * .setServiceDescription(createInvoice.getIansServices().get(i).
-				 * getServiceDescription()); iansInvoiceService.setServiceStartDate(new
-				 * SimpleDateFormat("dd/MM/yyyy")
-				 * .parse(createInvoice.getIansServices().get(i).getServiceStartDate()));
-				 * iansInvoiceService.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy")
-				 * .parse(createInvoice.getIansServices().get(i).getServiceEndDate()));
-				 * 
-				 * iansInvoiceServiceRepository.save(iansInvoiceService);
-				 * 
-				 * }
-				 * 
-				 * }
-				 */
-	 		   
-	 		   if(invoice.getInvoiceId()!=0) {
-				      return ResponseEntity.status(HttpStatus.CREATED).body(invoice.getInvoiceId());
-	 		   }
-				      else
-				      {
-				      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"status\":\"Error into Insertion for Invoice.\"}");
-				      }
-				      
-	 	       
-	 		   
-	 	   }
-	 	   
-	 	  catch (Exception e) {
-	 	 		e.printStackTrace();
-	 	 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-	 	 	}
-	 	   
-	   }
+	 
+	   @RequestMapping(value = "/updateInvoice",method = RequestMethod.POST ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+       public ResponseEntity<Object> updateInvoice(@RequestBody UpdateInvoice updateInvoice) {
+        
+          try {
+              
+              IansInvoice invoice = new IansInvoice();
+              invoice.setCreatedBy(updateInvoice.getCreatedBy());
+              invoice.setCgstAmount(updateInvoice.getTotalCGSTAmount());
+              invoice.setSgstAmount(updateInvoice.getTotalSGSTAmount());
+              invoice.setIgstAmount(updateInvoice.getTotalIGSTAmount());
+              invoice.setTotalAmount(updateInvoice.getTotalAmount());
+              invoice.setCustomerName(updateInvoice.getCustomerName());
+              invoice.setInvoiceId(updateInvoice.getInvoiceId());
+              invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(updateInvoice.getSubscriptionDate()));
+              
+              //Put Invoice from invoice table itself.
+              invoice.setInvoiceNo(updateInvoice.getInvoiceNo());
+              invoice.setIsPaid("0");
+              invoice.setIansCustomeId(updateInvoice.getCustomerId());
+              
+             invoice.setIansServiceId(updateInvoice.getServiceId());
+             invoice.setServiceDescription(updateInvoice.getServiceDescription());
+             invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(updateInvoice.getServiceStartDate())); 
+             invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(updateInvoice.getServiceEndDate()));
+              
+              
+              invoice = iansInvoiceRepository.save(invoice);
+              
+               /*
+                * if (invoice.getInvoiceId() != 0) { for (int i = 0; i <
+                * createInvoice.getIansServices().size(); i++) {
+                * 
+                * IansInvoiceService iansInvoiceService = new IansInvoiceService();
+                * iansInvoiceService.setCreatedBy(createInvoice.getIansServices().get(i).
+                * getCreatedBy());
+                * 
+                * iansInvoiceService.setIansInvoiceId(invoice.getInvoiceId());
+                * iansInvoiceService.setIansServiceId(createInvoice.getIansServices().get(i).
+                * getServiceId()); iansInvoiceService
+                * .setServiceDescription(createInvoice.getIansServices().get(i).
+                * getServiceDescription()); iansInvoiceService.setServiceStartDate(new
+                * SimpleDateFormat("dd/MM/yyyy")
+                * .parse(createInvoice.getIansServices().get(i).getServiceStartDate()));
+                * iansInvoiceService.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy")
+                * .parse(createInvoice.getIansServices().get(i).getServiceEndDate()));
+                * 
+                * iansInvoiceServiceRepository.save(iansInvoiceService);
+                * 
+                * }
+                * 
+                * }
+                */
+              
+              if(invoice.getInvoiceId()!=0) {
+                     return ResponseEntity.status(HttpStatus.CREATED).body(invoice.getInvoiceId());
+              }
+                     else
+                     {
+                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"status\":\"Error into Insertion for Invoice.\"}");
+                     }
+                     
+              
+              
+          }
+          
+         catch (Exception e) {
+               e.printStackTrace();
+               return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+           }
+          
+      }
+	   
 	   
 	   @PostMapping("/downloadInvoice")
 		public void download(@RequestBody GenerateInvoiceDTO generateInvoiceDTO, HttpServletRequest request,HttpServletResponse response) throws IOException 
@@ -570,196 +577,191 @@ public class IANSAccoutingController {
 			   
 		   }
 	   
-	   
-	   private FileOutputStream generateBulkInvoiceReceipt(GenerateInvoiceDTO generateInvoiceDTO) throws Exception
-	   {
-		    File file = new File(generateInvoiceDTO.getInvoiceNo());
-		    FileOutputStream fileout = new FileOutputStream(file);
-		   
-		    PdfFont font = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD); 
-			  
-			PdfWriter writer = new PdfWriter(fileout);
-
-			PdfDocument pdfDoc = new PdfDocument(writer); 
-			
-			Document document = new Document(pdfDoc); 
-			
-			
-			String para1= "GSTIN No.- 09AAACI2341F1ZY                    TAX INVOICE                    PAN NO. AAACI2341F"; 
-			
-			String para2 = "IANS INDIA PRIVATE LIMITED";
-			
-			String para3 = "A - 45 to 50, Pioneer House, First Floor, Right Wing, Sector - 16, Noida – 201301. U.P. INDIA";
-			
-			String para4 = "Tel. : +91-120-4822400. Fax : +91-120-4822403/04";
-			
-			String para5 = "email : accounts@ians.in";
-			
-			String para6 = generateInvoiceDTO.getCompanyName()+"\n"
-					+ generateInvoiceDTO.getHeadOfficeAddress()+"\n"
-					+ generateInvoiceDTO.getGstNo();
-			
-			String para7 = generateInvoiceDTO.getInvoiceNo();
-
-			String para8 = "Dated :"+ LocalDate.now();
-			
-			
-			String para9 = "For IANS INDIA PRIVATE LIMITED";
-			
-			String para10 = "TERMS OF PAYMENTS";
-			String para11 = "Bills are payable on presentation";
-			String para12 = "Payments should be made in favour of IANS INDIA PRIVATE LIMITED";
-				
-			
-			String para13 = "NOTE: SUPPLY MEANT FOR EXPORT UNDER LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX.";
-			
-			String para14 = "* This is a computer generated invoice and therefore does not require a signature.";
-			
-			 float [] pointColumnWidths1 = {250f, 645f}; 		
-			 Table table1 = new Table(pointColumnWidths1); 
-		     
-			 float [] pointColumnWidths2 = {482f, 45f}; 		
-			 Table table2 = new Table(pointColumnWidths2); 
-			 
-			 float [] pointColumnWidths3 = {40f, 345f, 100f}; 		
-			 Table table3 = new Table(pointColumnWidths3);
-			 
-			 
-			
-			  Cell headerColumn1 = new Cell();       
-			  headerColumn1.add("S. NO."); 
-			  table3.addCell("S. NO.");		
-		      
-		      Cell headerColumn2 = new Cell();       
-		      headerColumn2.add("DESCRIPTION"); 
-		      table3.addCell("DESCRIPTION");		
-		      
-		      Cell headerColumn3 = new Cell();       
-		      headerColumn3.add("Amount"); 
-		      table3.addCell("Amount");		
-			 
-			 
-		      
-		      Cell column1 = new Cell();       
-		      column1.add("S. NO."); 
-			  table3.addCell("1");		
-		      
-		      Cell column2 = new Cell();       
-		      column2.add("DESCRIPTION"); 
-		      table3.addCell(generateInvoiceDTO.getServiceDescription()).setFontSize(10);		
-		      
-		 	
-		      Cell column3 = new Cell();       
-		      column3.add("Amount"); 
-			  table3.addCell(String.valueOf(generateInvoiceDTO.getTotalAmount()));	
-		      
-		      
-			  Cell column4 = new Cell();       
-			  column4.add("S. NO."); 
-			  table3.addCell("2");		
-		      
-		      Cell column5 = new Cell();       
-		      column5.add("TAXABLE VALUE \nCGST @ 9% \nSGST @ 9% \nIGST @ 18%"); 
-		      table3.addCell("TAXABLE VALUE \nCGST@9% \nSGST@9% \nIGST@18%").setFontSize(10);	
-		      
-		    
-		      Cell column10 = new Cell();       
-		      column10.add("Amount"); 
-			  table3.addCell(String.valueOf(generateInvoiceDTO.getTotalCGSTAmount()+generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount()));	
-			  
-			  Float totalInvoiceAmount = generateInvoiceDTO.getTotalAmount()+generateInvoiceDTO.getTotalCGSTAmount()+generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount();
-			  
-			  Cell column11 = new Cell();       
-			  column11.add("Amt in words"); 
-			  table3.addCell("Amt in words").setFontSize(6);		
-		      
-		      Cell column12 = new Cell();       
-		      column12.add("NumberInWords"); 
-		      table3.addCell("Rs "+NumberInWords.convertNumberToWords(Integer.valueOf(String.valueOf(totalInvoiceAmount)))).setFontSize(12);	
-		      
-		    
-		      Cell column13 = new Cell();       
-		      column13.add("Amount"); 
-			  table3.addCell(String.valueOf(totalInvoiceAmount));	
-			  
-		      
-		      
-		      Cell cellnewtab1 = new Cell();       
-		      cellnewtab1.add("Bill To:"); 
-		      table1.addCell(para6);		
-					
-		      Cell cellnewtab2 = new Cell();       
-		      cellnewtab2.add("Invoice No:"); 
-		      table2.addCell(para7+" "+para8);
-		      
-
-			
-			// Creating an Area Break    
-			Paragraph paragraph1 = new Paragraph (para1).setFontSize(12);
-			paragraph1.setFont(font);
-			paragraph1.setMarginTop(0);
-			
-			Paragraph paragraph2 = new Paragraph (para2).setFontSize(15);; 
-			paragraph2.setFont(font);
-			paragraph2.setTextAlignment(TextAlignment.CENTER);
-			
-			Paragraph paragraph3 = new Paragraph (para3).setFontSize(8); 
-			paragraph3.setTextAlignment(TextAlignment.CENTER);
-			paragraph2.setFont(font);
-			
-			
-			Paragraph paragraph4 = new Paragraph (para4).setFontSize(8); 
-			paragraph4.setTextAlignment(TextAlignment.CENTER);
-			
-			Paragraph paragraph5 = new Paragraph (para5).setFontSize(8); 
-			paragraph5.setTextAlignment(TextAlignment.CENTER);
-			
-			Paragraph paragraph6 = new Paragraph (para9).setFontSize(8); 
-			paragraph6.setTextAlignment(TextAlignment.RIGHT);
-			
-			
-			Paragraph paragraph7 = new Paragraph (para10).setFont(font).setFontSize(8); 
-			paragraph7.setTextAlignment(TextAlignment.LEFT);
-			
-			
-			Paragraph paragraph8 = new Paragraph (para11).setFontSize(8); 
-			paragraph8.setTextAlignment(TextAlignment.LEFT);
-			
-			
-			Paragraph paragraph9 = new Paragraph (para12).setFontSize(8); 
-			paragraph9.setTextAlignment(TextAlignment.LEFT);
-			
-			Paragraph paragraph10= new Paragraph (para13).setFont(font).setFontSize(8); 
-			paragraph9.setTextAlignment(TextAlignment.LEFT);
-			
-			
-			Paragraph paragraph11 = new Paragraph (para14).setFontSize(8); 
-			paragraph9.setTextAlignment(TextAlignment.LEFT);
-			
-		
-			document.add(paragraph1); 
-			document.add(paragraph2); 
-			document.add(paragraph3); 
-			document.add(paragraph4); 
-			document.add(paragraph5); 
-			
-			
-			
-			document.add(table2); 
-			document.add(table1);
-			document.add(table3);
-			document.add(paragraph6); 
-			
-			document.add(paragraph7); 
-			document.add(paragraph8); 
-			document.add(paragraph9); 
-			document.add(paragraph10); 
-			document.add(paragraph11); 
-			
-			document.close();
-		   
-			return fileout;
-	   }
+			/*
+			 * private FileOutputStream generateBulkInvoiceReceipt(GenerateInvoiceDTO
+			 * generateInvoiceDTO) throws Exception { File file = new
+			 * File(generateInvoiceDTO.getInvoiceNo()); FileOutputStream fileout = new
+			 * FileOutputStream(file);
+			 * 
+			 * PdfFont font = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+			 * 
+			 * PdfWriter writer = new PdfWriter(fileout);
+			 * 
+			 * PdfDocument pdfDoc = new PdfDocument(writer);
+			 * 
+			 * Document document = new Document(pdfDoc);
+			 * 
+			 * 
+			 * String para1=
+			 * "GSTIN No.- 09AAACI2341F1ZY                    TAX INVOICE                    PAN NO. AAACI2341F"
+			 * ;
+			 * 
+			 * String para15 = "UP CODE - 09";
+			 * 
+			 * String para2 = "IANS INDIA PRIVATE LIMITED";
+			 * 
+			 * String para3 =
+			 * "A - 45 to 50, Pioneer House, First Floor, Right Wing, Sector - 16, Noida – 201301. U.P. INDIA"
+			 * ;
+			 * 
+			 * String para4 = "Tel. : +91-120-4822400. Fax : +91-120-4822403/04";
+			 * 
+			 * String para5 = "email : accounts@ians.in";
+			 * 
+			 * String para6 = generateInvoiceDTO.getCompanyName()+"\n" +
+			 * generateInvoiceDTO.getHeadOfficeAddress()+"\n" +
+			 * generateInvoiceDTO.getGstNo();
+			 * 
+			 * String para7 = generateInvoiceDTO.getInvoiceNo();
+			 * 
+			 * String para8 = "Dated :"+ LocalDate.now();
+			 * 
+			 * 
+			 * String para9 = "For IANS INDIA PRIVATE LIMITED";
+			 * 
+			 * String para10 = "TERMS OF PAYMENTS"; String para11 =
+			 * "Bills are payable on presentation"; String para12 =
+			 * "Payments should be made in favour of IANS INDIA PRIVATE LIMITED";
+			 * 
+			 * 
+			 * String para13 =
+			 * "NOTE: SUPPLY MEANT FOR EXPORT UNDER LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX."
+			 * ;
+			 * 
+			 * String para14 =
+			 * "* This is a computer generated invoice and therefore does not require a signature."
+			 * ;
+			 * 
+			 * float [] pointColumnWidths1 = {250f, 645f}; Table table1 = new
+			 * Table(pointColumnWidths1);
+			 * 
+			 * float [] pointColumnWidths2 = {482f, 45f}; Table table2 = new
+			 * Table(pointColumnWidths2);
+			 * 
+			 * float [] pointColumnWidths3 = {40f, 345f, 100f}; Table table3 = new
+			 * Table(pointColumnWidths3);
+			 * 
+			 * 
+			 * 
+			 * Cell headerColumn1 = new Cell(); headerColumn1.add("S. NO.");
+			 * table3.addCell("S. NO.");
+			 * 
+			 * Cell headerColumn2 = new Cell(); headerColumn2.add("DESCRIPTION");
+			 * table3.addCell("DESCRIPTION");
+			 * 
+			 * Cell headerColumn3 = new Cell(); headerColumn3.add("Amount");
+			 * table3.addCell("Amount");
+			 * 
+			 * 
+			 * 
+			 * Cell column1 = new Cell(); column1.add("S. NO."); table3.addCell("1");
+			 * 
+			 * Cell column2 = new Cell(); column2.add("DESCRIPTION");
+			 * table3.addCell(generateInvoiceDTO.getServiceDescription()).setFontSize(10);
+			 * 
+			 * 
+			 * Cell column3 = new Cell(); column3.add("Amount");
+			 * table3.addCell(String.valueOf(generateInvoiceDTO.getTotalAmount()));
+			 * 
+			 * 
+			 * Cell column4 = new Cell(); column4.add("S. NO."); table3.addCell("2");
+			 * 
+			 * Cell column5 = new Cell();
+			 * column5.add("TAXABLE VALUE \nCGST @ 9% \nSGST @ 9% \nIGST @ 18%");
+			 * table3.addCell("TAXABLE VALUE \nCGST@9% \nSGST@9% \nIGST@18%").setFontSize(10
+			 * );
+			 * 
+			 * 
+			 * Cell column10 = new Cell(); column10.add("Amount");
+			 * table3.addCell(String.valueOf(generateInvoiceDTO.getTotalCGSTAmount()+
+			 * generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount
+			 * ()));
+			 * 
+			 * Float totalInvoiceAmount =
+			 * generateInvoiceDTO.getTotalAmount()+generateInvoiceDTO.getTotalCGSTAmount()+
+			 * generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount
+			 * ();
+			 * 
+			 * Cell column11 = new Cell(); column11.add("Amt in words");
+			 * table3.addCell("Amt in words").setFontSize(6);
+			 * 
+			 * Cell column12 = new Cell(); column12.add("NumberInWords");
+			 * table3.addCell("Rs "+NumberInWords.convertNumberToWords(Integer.valueOf(
+			 * String.valueOf(totalInvoiceAmount)))).setFontSize(12);
+			 * 
+			 * 
+			 * Cell column13 = new Cell(); column13.add("Amount");
+			 * table3.addCell(String.valueOf(totalInvoiceAmount));
+			 * 
+			 * 
+			 * 
+			 * Cell cellnewtab1 = new Cell(); cellnewtab1.add("Bill To:");
+			 * table1.addCell(para6);
+			 * 
+			 * Cell cellnewtab2 = new Cell(); cellnewtab2.add("Invoice No:");
+			 * table2.addCell(para7+" "+para8);
+			 * 
+			 * 
+			 * 
+			 * // Creating an Area Break Paragraph paragraph1 = new Paragraph
+			 * (para1).setFontSize(12); paragraph1.setFont(font);
+			 * paragraph1.setMarginTop(0);
+			 * 
+			 * Paragraph paragraph15 = new Paragraph (para15).setFontSize(12);
+			 * paragraph15.setFont(font); paragraph15.setMarginTop(0);
+			 * 
+			 * Paragraph paragraph2 = new Paragraph (para2).setFontSize(15);;
+			 * paragraph2.setFont(font); paragraph2.setTextAlignment(TextAlignment.CENTER);
+			 * 
+			 * Paragraph paragraph3 = new Paragraph (para3).setFontSize(8);
+			 * paragraph3.setTextAlignment(TextAlignment.CENTER); paragraph2.setFont(font);
+			 * 
+			 * 
+			 * Paragraph paragraph4 = new Paragraph (para4).setFontSize(8);
+			 * paragraph4.setTextAlignment(TextAlignment.CENTER);
+			 * 
+			 * Paragraph paragraph5 = new Paragraph (para5).setFontSize(8);
+			 * paragraph5.setTextAlignment(TextAlignment.CENTER);
+			 * 
+			 * Paragraph paragraph6 = new Paragraph (para9).setFontSize(8);
+			 * paragraph6.setTextAlignment(TextAlignment.RIGHT);
+			 * 
+			 * 
+			 * Paragraph paragraph7 = new Paragraph (para10).setFont(font).setFontSize(8);
+			 * paragraph7.setTextAlignment(TextAlignment.LEFT);
+			 * 
+			 * 
+			 * Paragraph paragraph8 = new Paragraph (para11).setFontSize(8);
+			 * paragraph8.setTextAlignment(TextAlignment.LEFT);
+			 * 
+			 * 
+			 * Paragraph paragraph9 = new Paragraph (para12).setFontSize(8);
+			 * paragraph9.setTextAlignment(TextAlignment.LEFT);
+			 * 
+			 * Paragraph paragraph10= new Paragraph (para13).setFont(font).setFontSize(8);
+			 * paragraph9.setTextAlignment(TextAlignment.LEFT);
+			 * 
+			 * 
+			 * Paragraph paragraph11 = new Paragraph (para14).setFontSize(8);
+			 * paragraph9.setTextAlignment(TextAlignment.LEFT);
+			 * 
+			 * 
+			 * document.add(paragraph1); document.add(paragraph15);
+			 * document.add(paragraph2); document.add(paragraph3); document.add(paragraph4);
+			 * document.add(paragraph5);
+			 * 
+			 * 
+			 * 
+			 * document.add(table2); document.add(table1); document.add(table3);
+			 * document.add(paragraph6);
+			 * 
+			 * document.add(paragraph7); document.add(paragraph8); document.add(paragraph9);
+			 * document.add(paragraph10); document.add(paragraph11);
+			 * 
+			 * document.close();
+			 * 
+			 * return fileout; }
+			 */
 	   
 	   private ByteArrayOutputStream generateInvoiceReceipt(GenerateInvoiceDTO generateInvoiceDTO) throws Exception
 	   {
@@ -776,11 +778,13 @@ public class IANSAccoutingController {
 			
 			String para2 = "IANS INDIA PRIVATE LIMITED";
 			
-			String para3 = "A - 45 to 50, Pioneer House, First Floor, Right Wing, Sector - 16, Noida – 201301. U.P. INDIA";
+			String para15 = "UP CODE -09                                                     CIN-U74899DLI994PTC063783";
+			
+			String para3 = "A-6,Ground Floor,Sector - 16,Noida – 201301. U.P. INDIA";
 			
 			String para4 = "Tel. : +91-120-4822400. Fax : +91-120-4822403/04";
 			
-			String para5 = "email : accounts@ians.in";
+			String para5 = "Email : accounts@ians.in";
 			
 			String para6 = generateInvoiceDTO.getCompanyName()+"\n"
 					+ generateInvoiceDTO.getHeadOfficeAddress()+"\n"
@@ -794,11 +798,11 @@ public class IANSAccoutingController {
 			String para9 = "For IANS INDIA PRIVATE LIMITED";
 			
 			String para10 = "TERMS OF PAYMENTS";
-			String para11 = "Bills are payable on presentation";
-			String para12 = "Payments should be made in favour of IANS INDIA PRIVATE LIMITED";
-				
+			String para11 = "1. Bills are payable on presentation";
+			String para12 = "2. Payments should be made in favour of IANS INDIA PRIVATE LIMITED";
+			String para16 = "3. Reverse Charge Mechanism (RCM) is applicable on this Invoice- No";	
 			
-			String para13 = "NOTE: SUPPLY MEANT FOR EXPORT UNDER LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX.";
+			//String para13 = "NOTE: SUPPLY MEANT FOR EXPORT UNDER LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX.";
 			
 			String para14 = "* This is a computer generated invoice and therefore does not require a signature.";
 			
@@ -819,22 +823,22 @@ public class IANSAccoutingController {
 		      
 		      Cell headerColumn2 = new Cell();       
 		      headerColumn2.add("DESCRIPTION"); 
-		      table3.addCell("DESCRIPTION");		
+		      table3.addCell("D E S C R I P T I O N");		
 		      
 		      Cell headerColumn3 = new Cell();       
 		      headerColumn3.add("Amount"); 
-		      table3.addCell("Amount");		
+		      table3.addCell("Amount Rs.");		
 			 
 			 
 		      
 		      Cell column1 = new Cell();       
 		      column1.add("S. NO."); 
 			  table3.addCell("1");		
-		      
+		      	 		 			  
 		      Cell column2 = new Cell();       
 		      column2.add("DESCRIPTION"); 
-		      table3.addCell(generateInvoiceDTO.getServiceDescription()).setFontSize(10);		
-		      
+		     // table3.addCell(generateInvoiceDTO.getServiceDescription()).setFontSize(10);		
+		      table3.addCell("SUBSCRIPTION CHARGES "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF ").setFontSize(10);	
 		 	
 		      Cell column3 = new Cell();       
 		      column3.add("Amount"); 
@@ -885,7 +889,7 @@ public class IANSAccoutingController {
 		      
 		      Cell column12 = new Cell();       
 		      column12.add("NumberInWords"); 
-		      table3.addCell("Rs "+NumberInWords.convertNumberToWords(Math.round(totalInvoiceAmount))).setFontSize(12);	
+		      table3.addCell("Rs "+NumberInWords.convertNumberToWords(Math.round(totalInvoiceAmount))+" Only").setFontSize(12);	
 		      
 		    
 		      Cell column13 = new Cell();       
@@ -908,6 +912,10 @@ public class IANSAccoutingController {
 			Paragraph paragraph1 = new Paragraph (para1).setFontSize(12);
 			paragraph1.setFont(font);
 			paragraph1.setMarginTop(0);
+			
+			Paragraph paragraph15 = new Paragraph (para15).setFontSize(12);
+			paragraph15.setFont(font);
+			paragraph15.setMarginTop(0);
 			
 			Paragraph paragraph2 = new Paragraph (para2).setFontSize(15);; 
 			paragraph2.setFont(font);
@@ -939,15 +947,19 @@ public class IANSAccoutingController {
 			Paragraph paragraph9 = new Paragraph (para12).setFontSize(8); 
 			paragraph9.setTextAlignment(TextAlignment.LEFT);
 			
-			Paragraph paragraph10= new Paragraph (para13).setFont(font).setFontSize(8); 
-			paragraph9.setTextAlignment(TextAlignment.LEFT);
+			Paragraph paragraph16 = new Paragraph (para16).setFontSize(8); 
+			paragraph16.setTextAlignment(TextAlignment.LEFT);
 			
+//			Paragraph paragraph10= new Paragraph (para13).setFont(font).setFontSize(8); 
+//			paragraph9.setTextAlignment(TextAlignment.LEFT);
+//			
 			
 			Paragraph paragraph11 = new Paragraph (para14).setFontSize(8); 
 			paragraph9.setTextAlignment(TextAlignment.LEFT);
 			
 		
 			document.add(paragraph1); 
+			document.add(paragraph15); 
 			document.add(paragraph2); 
 			document.add(paragraph3); 
 			document.add(paragraph4); 
@@ -963,7 +975,8 @@ public class IANSAccoutingController {
 			document.add(paragraph7); 
 			document.add(paragraph8); 
 			document.add(paragraph9); 
-			document.add(paragraph10); 
+			document.add(paragraph16); 
+			//document.add(paragraph10); 
 			document.add(paragraph11); 
 			
 			document.close();

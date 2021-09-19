@@ -123,5 +123,7 @@ public class GenerateInvoiceDTO implements Serializable{
 	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
+	
+	
 
 }

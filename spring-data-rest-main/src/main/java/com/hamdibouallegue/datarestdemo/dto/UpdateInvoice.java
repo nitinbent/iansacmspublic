@@ -10,7 +10,7 @@ public class UpdateInvoice implements Serializable{
 	private static final long serialVersionUID = 9184335940577795376L;
 
 	private Integer invoiceId;
-	//private String customerName;
+	private String customerName;
 	private Integer customerId;
 	private String createdBy;
 	private Float totalAmount;
@@ -18,10 +18,15 @@ public class UpdateInvoice implements Serializable{
 	private Float totalSGSTAmount;
 	private Float totalIGSTAmount;
 	private String subscriptionDate;
+	private String sacCode;
 	private String startDate;
 	private String endDate;
+	private String invoiceNo;
 	private Integer serviceId;
 	private String serviceDescription;
+	
+	private String serviceStartDate;
+    private String serviceEndDate;
 	
 	public Integer getInvoiceId() {
 		return invoiceId;
@@ -94,6 +99,36 @@ public class UpdateInvoice implements Serializable{
 	}
 	public void setServiceDescription(String serviceDescription) {
 		this.serviceDescription = serviceDescription;
+	}
+	public String getServiceStartDate() {
+		return serviceStartDate;
+	}
+	public void setServiceStartDate(String serviceStartDate) {
+		this.serviceStartDate = serviceStartDate;
+	}
+	public String getServiceEndDate() {
+		return serviceEndDate;
+	}
+	public void setServiceEndDate(String serviceEndDate) {
+		this.serviceEndDate = serviceEndDate;
+	}
+	public String getSacCode() {
+		return sacCode;
+	}
+	public void setSacCode(String sacCode) {
+		this.sacCode = sacCode;
+	}
+	public String getCustomerName() {
+		return customerName;
+	}
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	public String getInvoiceNo() {
+		return invoiceNo;
+	}
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
 	}
 
 

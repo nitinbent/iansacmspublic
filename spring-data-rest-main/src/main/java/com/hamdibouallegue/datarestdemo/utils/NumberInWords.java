@@ -3,11 +3,11 @@ package com.hamdibouallegue.datarestdemo.utils;
 public class NumberInWords {
 	
 	    
-	    private static String[] singleDigit = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+	    private static String[] singleDigit = {"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
 
-	    private static String[] tensDigits = {"", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+	    private static String[] tensDigits = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
 	    
-	    private static String[] elevenToNineteenDigits = {"", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+	    private static String[] elevenToNineteenDigits = {"", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
 	    
 	    public static String convertNumberToWords(int number) {
 	        
@@ -81,7 +81,7 @@ public class NumberInWords {
 	    
 	    private static String convertHundreds(int number) {
 	        
-	        String hundredResult = singleDigit[number / 100] + " hundred";
+	        String hundredResult = singleDigit[number / 100] + " Hundred";
 	        
 	        int remaining = number % 100;
 
@@ -101,7 +101,7 @@ public class NumberInWords {
 	        
 	        String thousandResult = "";
 	        
-	        thousandResult = convertNumberToWords(thousand) + " thousand";
+	        thousandResult = convertNumberToWords(thousand) + " Thousand";
 	                
 	        int remaining = number % 1000;
 
@@ -121,7 +121,7 @@ public class NumberInWords {
 	        
 	        String millionResult = "";
 	        
-	        millionResult = convertNumberToWords(million) + " million";
+	        millionResult = convertNumberToWords(million) + " Million";
 	        
 	        int remaining = number % 1000000;
 
@@ -141,7 +141,7 @@ public class NumberInWords {
 	        
 	        String billionResult = "";
 	        
-	        billionResult = convertNumberToWords(billion) + " billion";
+	        billionResult = convertNumberToWords(billion) + " Billion";
 	        
 	        int remaining = number % 1000000000;
 
