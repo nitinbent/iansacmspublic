@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import com.hamdibouallegue.datarestdemo.models.IansCity;
 import com.hamdibouallegue.datarestdemo.models.IansCountry;
 import com.hamdibouallegue.datarestdemo.models.IansCustomer;
+import com.hamdibouallegue.datarestdemo.models.IansInvoiceSequence;
 import com.hamdibouallegue.datarestdemo.models.IansService;
 import com.hamdibouallegue.datarestdemo.models.IansState;
 import com.hamdibouallegue.datarestdemo.models.IansSubscription;
@@ -25,7 +26,8 @@ public class RestConfig implements RepositoryRestConfigurer {
 	        config.exposeIdsFor(IansCustomer.class);
 	        config.exposeIdsFor(IansService.class);
 	        config.exposeIdsFor(IansSubscription.class);
-	        
+	        config.exposeIdsFor(IansInvoiceSequence.class);
+
 	        cors.addMapping("/api/**").allowedOrigins("*");
     }
 

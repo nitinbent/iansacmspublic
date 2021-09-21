@@ -842,7 +842,7 @@ public class IANSAccoutingController {
 		      Cell column2 = new Cell();       
 		      column2.add("DESCRIPTION"); 
 		     // table3.addCell(generateInvoiceDTO.getServiceDescription()).setFontSize(10);		
-		      table3.addCell("SUBSCRIPTION CHARGES "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF ").setFontSize(10);	
+		      table3.addCell("SUBSCRIPTION CHARGES FOR "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF "+generateInvoiceDTO.getSubscriptionStartDate()+" TO "+generateInvoiceDTO.getSubscriptionDate()+"\n\n\n\n\n"+generateInvoiceDTO.getSacCode()).setFontSize(10);	
 		 	
 		      Cell column3 = new Cell();       
 		      column3.add("Amount"); 
@@ -854,8 +854,8 @@ public class IANSAccoutingController {
 			  table3.addCell("2");		
 		      
 		      Cell column5 = new Cell();       
-		      column5.add("TAXABLE VALUE \nCGST @ 9% \nSGST @ 9% \nIGST @ 18%"); 
-		      table3.addCell("TAXABLE VALUE \nCGST@9% \nSGST@9% \nIGST@18%").setFontSize(10);	
+		      column5.add("CGST @ 9% \nSGST @ 9% \nIGST @ 18%"); 
+		      table3.addCell("CGST@9% \nSGST@9% \nIGST@18%").setFontSize(10);	
 		      
 		    
 		      Cell column10 = new Cell();       

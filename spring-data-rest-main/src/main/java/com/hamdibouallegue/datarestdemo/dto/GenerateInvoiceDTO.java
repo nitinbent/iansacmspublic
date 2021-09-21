@@ -23,6 +23,7 @@ public class GenerateInvoiceDTO implements Serializable{
 	private String endDate;
 	private Integer serviceId;
 	private String serviceDescription;
+	private String sacCode;
 	
 	private String companyName;
 	private String headOfficeAddress;
@@ -129,6 +130,12 @@ public class GenerateInvoiceDTO implements Serializable{
 	}
 	public void setSubscriptionStartDate(String subscriptionStartDate) {
 		this.subscriptionStartDate = subscriptionStartDate;
+	}
+	public String getSacCode() {
+		return sacCode;
+	}
+	public void setSacCode(String sacCode) {
+		this.sacCode = sacCode;
 	}
 	
 	
