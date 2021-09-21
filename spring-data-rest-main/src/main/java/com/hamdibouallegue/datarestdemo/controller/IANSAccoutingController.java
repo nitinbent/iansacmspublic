@@ -46,11 +46,13 @@ import com.hamdibouallegue.datarestdemo.dto.UpdateInvoice;
 import com.hamdibouallegue.datarestdemo.models.IansCity;
 import com.hamdibouallegue.datarestdemo.models.IansCustomer;
 import com.hamdibouallegue.datarestdemo.models.IansInvoice;
+import com.hamdibouallegue.datarestdemo.models.IansInvoiceSequence;
 import com.hamdibouallegue.datarestdemo.models.IansState;
 import com.hamdibouallegue.datarestdemo.models.UserPass;
 import com.hamdibouallegue.datarestdemo.repositories.IansCityRepository;
 import com.hamdibouallegue.datarestdemo.repositories.IansCustomerRepository;
 import com.hamdibouallegue.datarestdemo.repositories.IansInvoiceRepository;
+import com.hamdibouallegue.datarestdemo.repositories.IansInvoiceSequenceRepository;
 import com.hamdibouallegue.datarestdemo.repositories.IansStateRepository;
 import com.hamdibouallegue.datarestdemo.repositories.UserLoginRepository;
 import com.hamdibouallegue.datarestdemo.utils.NumberInWords;
@@ -86,6 +88,9 @@ public class IANSAccoutingController {
 	 
 	 @Autowired
 	 IansCustomerRepository iansCustomerRepository;
+	 
+	 @Autowired
+	 IansInvoiceSequenceRepository iansInvoiceSequenceRepository;
 
 	 
 	 @GetMapping(value = "/getStates",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -280,11 +285,16 @@ public class IANSAccoutingController {
    
 	 		   
 	 		   invoice.setSubscriptionStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate()));
-	 		   invoice.setSubscriptionDate(new SimpleDateFormat("YYYY-MM-DD").parse(createInvoice.getSubscriptionDate()));
+	 		   invoice.setSubscriptionDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getSubscriptionDate()));
 	 		   
 	 		   
 	 		   //Put Invoice from invoice table itself.
-	 		   invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+createInvoice.getCustomerId());
+	 		   //invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+createInvoice.getCustomerId());
+	 		   
+	 		   //Get latest Invoice ID
+	 		  IansInvoiceSequence iansInvoiceSequence = iansInvoiceSequenceRepository.findBySequenceTypeAndYearValueAndMonthValue("I",String.valueOf(LocalDate.now().getYear()),String.valueOf(LocalDate.now().getMonth().getValue()));
+	 		  invoice.setInvoiceNo(iansInvoiceSequence.getSequencePrefix()+"/"+iansInvoiceSequence.getSequenceStartValue());
+	 		   
 	 		   invoice.setIsPaid("0");
 	 		   invoice.setInvoiceStatus("C");
 	 		   invoice.setIansCustomeId(createInvoice.getCustomerId());
@@ -297,30 +307,12 @@ public class IANSAccoutingController {
 	 		   
 	 		   invoice = iansInvoiceRepository.save(invoice);
 	 		   
-				/*
-				 * if (invoice.getInvoiceId() != 0) { for (int i = 0; i <
-				 * createInvoice.getIansServices().size(); i++) {
-				 * 
-				 * IansInvoiceService iansInvoiceService = new IansInvoiceService();
-				 * iansInvoiceService.setCreatedBy(createInvoice.getIansServices().get(i).
-				 * getCreatedBy());
-				 * 
-				 * iansInvoiceService.setIansInvoiceId(invoice.getInvoiceId());
-				 * iansInvoiceService.setIansServiceId(createInvoice.getIansServices().get(i).
-				 * getServiceId()); iansInvoiceService
-				 * .setServiceDescription(createInvoice.getIansServices().get(i).
-				 * getServiceDescription()); iansInvoiceService.setServiceStartDate(new
-				 * SimpleDateFormat("dd/MM/yyyy")
-				 * .parse(createInvoice.getIansServices().get(i).getServiceStartDate()));
-				 * iansInvoiceService.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy")
-				 * .parse(createInvoice.getIansServices().get(i).getServiceEndDate()));
-				 * 
-				 * iansInvoiceServiceRepository.save(iansInvoiceService);
-				 * 
-				 * }
-				 * 
-				 * }
-				 */
+	 		   //Update Sequence Id in case of successful invoice creation
+	 		  // iansInvoiceSequenceRepository.updateSequenceStartValue(iansInvoiceSequence.getSequenceStartValue()+1, iansInvoiceSequence.getInvoiceId());
+	 		   
+	 		  iansInvoiceSequence.setSequenceStartValue(iansInvoiceSequence.getSequenceStartValue()+1);
+	 		   
+	 		  iansInvoiceSequenceRepository.save(iansInvoiceSequence);
 	 		   
 	 		   if(invoice.getInvoiceId()!=0) {
 	 			    
@@ -374,7 +366,15 @@ public class IANSAccoutingController {
 		 		   invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
 		 		   
 		 		   //Put Invoice from invoice table itself.
-		 		  invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+renewInvoice.getRenewServices().get(i).getCustomerId());
+		 		  //invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+renewInvoice.getRenewServices().get(i).getCustomerId());
+		 		  
+		 		  
+		 		   //Get latest Invoice ID
+		 		  IansInvoiceSequence iansInvoiceSequence = iansInvoiceSequenceRepository.findBySequenceTypeAndYearValueAndMonthValue("B",String.valueOf(LocalDate.now().getYear()),String.valueOf(LocalDate.now().getMonth().getValue()));
+		 		  invoice.setInvoiceNo(iansInvoiceSequence.getSequencePrefix()+"/"+iansInvoiceSequence.getSequenceStartValue());
+		 		   
+		 		  
+		 		  
 		 		  // invoice.setIsPaid("0");
 		 		  invoice.setIansCustomeId(renewInvoice.getRenewServices().get(i).getCustomerId());
 		 		   
@@ -384,6 +384,10 @@ public class IANSAccoutingController {
 		 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getServiceEndDate()));
 
 		 		  invoice = iansInvoiceRepository.save(invoice);
+		 		  
+		 		  iansInvoiceSequence.setSequenceStartValue(iansInvoiceSequence.getSequenceStartValue()+1);
+		 		   
+		 		  iansInvoiceSequenceRepository.save(iansInvoiceSequence);
 
 	 			   
 			   }

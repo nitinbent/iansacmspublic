@@ -46,10 +46,16 @@ public class IansInvoiceSequence implements Serializable{
 	private String updatedBy;
 	
 	@Column(name="SEQUENCE_START_VALUE")
-	private String customerName;
+	private Integer sequenceStartValue;
+	
+	@Column(name="SEQUENCE_END_VALUE")
+	private Integer sequenceEndValue;
 	
 	@Column(name="SEQUENCE_TYPE")
-	private String sequenceValue;
+	private String sequenceType;
+	
+	@Column(name="SEQUENCE_PREFIX")
+	private String sequencePrefix;
 	
 	@Column(name="YEAR_VALUE")
 	private String yearValue;
@@ -98,21 +104,6 @@ public class IansInvoiceSequence implements Serializable{
 		this.updatedBy = updatedBy;
 	}
 
-	public String getCustomerName() {
-		return customerName;
-	}
-
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
-
-	public String getSequenceValue() {
-		return sequenceValue;
-	}
-
-	public void setSequenceValue(String sequenceValue) {
-		this.sequenceValue = sequenceValue;
-	}
 
 	public String getYearValue() {
 		return yearValue;
@@ -128,6 +119,38 @@ public class IansInvoiceSequence implements Serializable{
 
 	public void setMonthValue(String monthValue) {
 		this.monthValue = monthValue;
+	}
+
+	public String getSequencePrefix() {
+		return sequencePrefix;
+	}
+
+	public void setSequencePrefix(String sequencePrefix) {
+		this.sequencePrefix = sequencePrefix;
+	}
+
+	public Integer getSequenceStartValue() {
+		return sequenceStartValue;
+	}
+
+	public void setSequenceStartValue(Integer sequenceStartValue) {
+		this.sequenceStartValue = sequenceStartValue;
+	}
+
+	public Integer getSequenceEndValue() {
+		return sequenceEndValue;
+	}
+
+	public void setSequenceEndValue(Integer sequenceEndValue) {
+		this.sequenceEndValue = sequenceEndValue;
+	}
+
+	public String getSequenceType() {
+		return sequenceType;
+	}
+
+	public void setSequenceType(String sequenceType) {
+		this.sequenceType = sequenceType;
 	}
 	
 	
