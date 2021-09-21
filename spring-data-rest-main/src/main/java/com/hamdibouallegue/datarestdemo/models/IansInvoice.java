@@ -64,6 +64,10 @@ public class IansInvoice implements Serializable {
 	private Date paymentDate;
 	
 	@Temporal(TemporalType.DATE)
+	@Column(name="SUBCRIPTION_START_DATE")
+	private Date subscriptionStartDate;
+	
+	@Temporal(TemporalType.DATE)
 	@Column(name="SUBCRIPTION_DATE")
 	private Date subscriptionDate;
 	
@@ -300,6 +304,14 @@ public class IansInvoice implements Serializable {
 
 	public void setSacCode(String sacCode) {
 		this.sacCode = sacCode;
+	}
+
+	public Date getSubscriptionStartDate() {
+		return subscriptionStartDate;
+	}
+
+	public void setSubscriptionStartDate(Date subscriptionStartDate) {
+		this.subscriptionStartDate = subscriptionStartDate;
 	}
 
 	/*

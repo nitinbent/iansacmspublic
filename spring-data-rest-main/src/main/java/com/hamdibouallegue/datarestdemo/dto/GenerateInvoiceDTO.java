@@ -17,6 +17,7 @@ public class GenerateInvoiceDTO implements Serializable{
 	private Float totalCGSTAmount;
 	private Float totalSGSTAmount;
 	private Float totalIGSTAmount;
+	private String subscriptionStartDate;
 	private String subscriptionDate;
 	private String startDate;
 	private String endDate;
@@ -122,6 +123,12 @@ public class GenerateInvoiceDTO implements Serializable{
 	}
 	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
+	}
+	public String getSubscriptionStartDate() {
+		return subscriptionStartDate;
+	}
+	public void setSubscriptionStartDate(String subscriptionStartDate) {
+		this.subscriptionStartDate = subscriptionStartDate;
 	}
 	
 	
