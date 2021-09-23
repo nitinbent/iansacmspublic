@@ -284,9 +284,15 @@ public class IANSAccoutingController {
 	 		   //invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
    
 	 		   
-	 		   invoice.setSubscriptionStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate()));
-	 		   invoice.setSubscriptionDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getSubscriptionDate()));
+	 		  // invoice.setSubscriptionStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate()));
+	 		  //invoice.setSubscriptionDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getSubscriptionDate()));
 	 		   
+	 		  
+	 		  // Sent by Virendra
+	 		  
+	 		  invoice.setSubscriptionStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate()));
+              invoice.setSubscriptionDate(new SimpleDateFormat("yyyy-MM-dd").parse(createInvoice.getSubscriptionDate()));
+              
 	 		   
 	 		   //Put Invoice from invoice table itself.
 	 		   //invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+createInvoice.getCustomerId());

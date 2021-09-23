@@ -15,6 +15,10 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name="IANS_INVOICE_SEQUENCE")
 public class IansInvoiceSequence implements Serializable{
@@ -30,9 +34,10 @@ public class IansInvoiceSequence implements Serializable{
 	private Integer invoiceId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="CREATED_AT")
-	@CreationTimestamp
-	private Date createdAt;
+    @Column(name="CREATED_AT")
+    @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date createdAt;
 
 	@Column(name="CREATED_BY")
 	private String createdBy;
@@ -40,6 +45,7 @@ public class IansInvoiceSequence implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="UPDATED_AT")
 	@UpdateTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date updatedAt;
 
 	@Column(name="UPDATED_BY")
