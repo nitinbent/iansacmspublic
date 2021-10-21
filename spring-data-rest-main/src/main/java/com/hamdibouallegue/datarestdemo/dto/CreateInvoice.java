@@ -22,6 +22,7 @@ public class CreateInvoice implements Serializable{
 	private Integer serviceId;
 	private String sacCode;
 	private String serviceDescription;
+	private String invoiceNo;
 
 	
 	public Integer getCustomerId() {
@@ -103,6 +104,12 @@ public class CreateInvoice implements Serializable{
 	}
 	public void setSacCode(String sacCode) {
 		this.sacCode = sacCode;
+	}
+	public String getInvoiceNo() {
+		return invoiceNo;
+	}
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
 	}
 
 }

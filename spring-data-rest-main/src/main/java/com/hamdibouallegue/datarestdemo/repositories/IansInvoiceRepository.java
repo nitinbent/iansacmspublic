@@ -20,4 +20,6 @@ public interface IansInvoiceRepository extends JpaRepository<IansInvoice, Intege
 
     List<IansInvoice> findBySubscriptionDateBetween(Date startDate, Date fifteenDaysAfterDateFromCurrent);
     
+    IansInvoice findByInvoiceId(int invoiceId);
+    
 }
