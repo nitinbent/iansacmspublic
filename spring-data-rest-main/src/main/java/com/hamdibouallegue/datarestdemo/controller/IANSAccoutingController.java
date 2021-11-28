@@ -299,7 +299,7 @@ public class IANSAccoutingController {
 	 		   //invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+createInvoice.getCustomerId());
 	 		   
 	 		   //Get latest Invoice ID
-	 		  IansInvoiceSequence iansInvoiceSequence = iansInvoiceSequenceRepository.findBySequenceTypeAndYearValueAndMonthValue("I",String.valueOf(LocalDate.now().getYear()),String.valueOf(LocalDate.now().getMonth().getValue()));
+	 		  IansInvoiceSequence iansInvoiceSequence = iansInvoiceSequenceRepository.findBySequenceType("I");
 	 		  invoice.setInvoiceNo(createInvoice.getInvoiceNo());
 	 		   
 	 		   invoice.setIsPaid("0");
@@ -317,7 +317,10 @@ public class IANSAccoutingController {
 	 		   //Update Sequence Id in case of successful invoice creation
 	 		  // iansInvoiceSequenceRepository.updateSequenceStartValue(iansInvoiceSequence.getSequenceStartValue()+1, iansInvoiceSequence.getInvoiceId());
 	 		   
-	 		  iansInvoiceSequence.setSequenceStartValue(iansInvoiceSequence.getSequenceStartValue()+1);
+	 		  String startValueByEndUser = createInvoice.getInvoiceNo().split("/")[3];
+	 		 		   
+	 		  iansInvoiceSequence.setSequenceStartValue(Integer.parseInt(startValueByEndUser)+1);
+	 		 		   
 	 		   
 	 		  iansInvoiceSequenceRepository.save(iansInvoiceSequence);
 	 		   
@@ -351,9 +354,12 @@ public class IANSAccoutingController {
 	 	 
 	 	   try {
 	 		   
+		 		IansInvoiceSequence iansInvoiceSequence = iansInvoiceSequenceRepository.findBySequenceType("I");
+
+	 		   
 	 		   for (int i = 0; i < renewInvoice.getRenewServices().size(); i++) 
 	 		   {
-				
+					 			   
 		 		   IansInvoice invoice = new IansInvoice();
 		 		   invoice.setCreatedBy(renewInvoice.getRenewServices().get(i).getCreatedBy());
 		 		   invoice.setCgstAmount(renewInvoice.getRenewServices().get(i).getTotalCGSTAmount());
@@ -377,8 +383,7 @@ public class IANSAccoutingController {
 		 		  
 		 		  
 		 		   //Get latest Invoice ID
-		 		  IansInvoiceSequence iansInvoiceSequence = iansInvoiceSequenceRepository.findBySequenceTypeAndYearValueAndMonthValue("B",String.valueOf(LocalDate.now().getYear()),String.valueOf(LocalDate.now().getMonth().getValue()));
-		 		  invoice.setInvoiceNo(iansInvoiceSequence.getSequencePrefix()+"/"+iansInvoiceSequence.getSequenceStartValue());
+		 		  invoice.setInvoiceNo(iansInvoiceSequence.getSequencePrefix()+"/"+renewInvoice.getStartInvoiceNo()+i);
 		 		   
 		 		  
 		 		  
@@ -392,13 +397,14 @@ public class IANSAccoutingController {
 
 		 		  invoice = iansInvoiceRepository.save(invoice);
 		 		  
-		 		  iansInvoiceSequence.setSequenceStartValue(iansInvoiceSequence.getSequenceStartValue()+1);
-		 		   
-		 		  iansInvoiceSequenceRepository.save(iansInvoiceSequence);
-
 	 			   
 			   }
 	 		   
+	 		   
+	 		  iansInvoiceSequence.setSequenceStartValue(Integer.valueOf(renewInvoice.getEndInvoiceNo()));
+	 		   
+	 		  iansInvoiceSequenceRepository.save(iansInvoiceSequence);
+
 
 				return ResponseEntity.status(HttpStatus.CREATED).body("");
 	 	

@@ -11,7 +11,7 @@ import com.hamdibouallegue.datarestdemo.models.IansInvoiceSequence;
 @CrossOrigin(origins = "*")
 public interface IansInvoiceSequenceRepository extends JpaRepository<IansInvoiceSequence, Integer> {
 	
-	IansInvoiceSequence findBySequenceTypeAndYearValueAndMonthValue(String sequenceType,String yearValue,String monthValue);
+	IansInvoiceSequence findBySequenceType(String sequenceType);
 	
 	 @Transactional
 	 @Query("update IansInvoiceSequence u set u.sequenceStartValue = :sequenceStartValue where u.invoiceId = :invoiceId")
