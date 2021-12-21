@@ -6,10 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -204,7 +204,7 @@ public class IANSAccoutingController {
 	   	   try {
 
 	   	          LocalDate fifteenDaysAfterDateFromCurrent = LocalDate.now().plusDays(15);
-	   	          List<IansInvoice> invoices = iansInvoiceRepository.findBySubscriptionDateBetween(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),Date.from(fifteenDaysAfterDateFromCurrent.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+	   	          List<IansInvoice> invoices = iansInvoiceRepository.findBySubscriptionDateBetweenAndInvoiceStatus(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),Date.from(fifteenDaysAfterDateFromCurrent.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),"C");
 			
 	   				   
 	   				   if(invoices!=null)
@@ -367,7 +367,11 @@ public class IANSAccoutingController {
 		 		   invoice.setIgstAmount(renewInvoice.getRenewServices().get(i).getTotalIGSTAmount());
 		 		   invoice.setTotalAmount(renewInvoice.getRenewServices().get(i).getTotalAmount());
 		 		   invoice.setCustomerName(renewInvoice.getRenewServices().get(i).getCustomerName());
-		 		   invoice.setInvoiceId(renewInvoice.getRenewServices().get(i).getInvoiceId());
+		 		   invoice.setSacCode(renewInvoice.getRenewServices().get(i).getSacCode());
+		 		   
+		 		   //IansCustomer customer = new IansCustomer();
+		 		   //customer.setCustomerId(renewInvoice.getRenewServices().get(i).getCustomerId());
+		 		   
 
 		 		   LocalDate invoiceSubscriptionOldDate = LocalDate.parse(renewInvoice.getRenewServices().get(i).getSubscriptionDate());
 		 			
@@ -382,10 +386,12 @@ public class IANSAccoutingController {
 		 		  //invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+renewInvoice.getRenewServices().get(i).getCustomerId());
 		 		  
 		 		  
-		 		   //Get latest Invoice ID
-		 		  invoice.setInvoiceNo(iansInvoiceSequence.getSequencePrefix()+"/"+renewInvoice.getStartInvoiceNo()+i);
+		 		   Integer invoicePostfixNumber = Integer.parseInt(renewInvoice.getStartInvoiceNo())+i;
 		 		   
-		 		  
+		 		   //Get latest Invoice ID
+		 		  invoice.setInvoiceNo(iansInvoiceSequence.getSequencePrefix()+"/"+invoicePostfixNumber);
+		 		   
+		 		  invoice.setInvoiceStatus("C");
 		 		  
 		 		  // invoice.setIsPaid("0");
 		 		  invoice.setIansCustomeId(renewInvoice.getRenewServices().get(i).getCustomerId());
@@ -398,10 +404,17 @@ public class IANSAccoutingController {
 		 		  invoice = iansInvoiceRepository.save(invoice);
 		 		  
 	 			   
+		 		  //Update Status of Old Invoice as Expired
+		 		 IansInvoice oldInvoice = iansInvoiceRepository.findByInvoiceId(renewInvoice.getRenewServices().get(i).getInvoiceId());
+		 		 oldInvoice.setInvoiceStatus("E");
+		 		 iansInvoiceRepository.save(oldInvoice);
+		 		 
+		 		 invoicePostfixNumber = null;
+		 		  
 			   }
 	 		   
 	 		   
-	 		  iansInvoiceSequence.setSequenceStartValue(Integer.valueOf(renewInvoice.getEndInvoiceNo()));
+	 		  iansInvoiceSequence.setSequenceStartValue(Integer.valueOf(renewInvoice.getEndInvoiceNo())+1);
 	 		   
 	 		  iansInvoiceSequenceRepository.save(iansInvoiceSequence);
 
@@ -791,6 +804,8 @@ public class IANSAccoutingController {
 	   {
 		    PdfFont font = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD); 
 			
+		    DecimalFormat df = new DecimalFormat("#.##");  
+		    
 		    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			PdfWriter writer = new PdfWriter(baos);
 			  
@@ -810,8 +825,8 @@ public class IANSAccoutingController {
 			
 			String para5 = "Email : accounts@ians.in";
 			
-			String para6 = generateInvoiceDTO.getCompanyName()+"                                                                                                                                                         Invoice no.:"+generateInvoiceDTO.getInvoiceNo()+"\n"
-					+ generateInvoiceDTO.getHeadOfficeAddress()+"                                                                                                                                    Dated :"+ LocalDate.now()+"\n"
+			String para6 = generateInvoiceDTO.getCompanyName()+"                                                                                                   Invoice no.:"+generateInvoiceDTO.getInvoiceNo()+"\n"
+					+ generateInvoiceDTO.getHeadOfficeAddress()+"                                                                Dated :"+ LocalDate.now()+"\n"
 					+ generateInvoiceDTO.getGstNo();
 			
 			String para7 = generateInvoiceDTO.getInvoiceNo();
@@ -862,12 +877,12 @@ public class IANSAccoutingController {
 		      Cell column2 = new Cell();       
 		      column2.add("DESCRIPTION"); 
 		     // table3.addCell(generateInvoiceDTO.getServiceDescription()).setFontSize(10);		
-		      table3.addCell("SUBSCRIPTION CHARGES FOR "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF "+IANSDateUtils.convertIntoWordDate("YYYY-mm-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionStartDate())+" TO "+IANSDateUtils.convertIntoWordDate("YYYY-mm-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionDate())+"\n\n\n\n\n"+"SAC CODE-"+generateInvoiceDTO.getSacCode()).setFontSize(9);
+		      table3.addCell("SUBSCRIPTION CHARGES FOR "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF "+IANSDateUtils.convertIntoWordDate("dd/MM/yyyy", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionStartDate())+" TO "+IANSDateUtils.convertIntoWordDate("yyyy-MM-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionDate())+"\n\n\n\n\n"+"SAC CODE-"+generateInvoiceDTO.getSacCode()).setFontSize(9);
 		      
 		 	
 		      Cell column3 = new Cell();       
 		      column3.add("Amount"); 
-			  table3.addCell(String.valueOf(generateInvoiceDTO.getTotalAmount())).setTextAlignment(TextAlignment.LEFT);	
+			  table3.addCell(String.valueOf(generateInvoiceDTO.getTotalAmount())+"0").setTextAlignment(TextAlignment.LEFT);	
 		      
 		      
 			  Cell column4 = new Cell();       
@@ -882,29 +897,42 @@ public class IANSAccoutingController {
 		      Cell column10 = new Cell();       
 		      column10.add("Amount"); 
 		      
-		      Float totalGSTAmount = 0.0f;
+		      Float totalGSTAmount = 0.00f;
+		      String toalgstAmount = "";
 		      
 		      if(generateInvoiceDTO.getTotalCGSTAmount()!=null && generateInvoiceDTO.getTotalIGSTAmount()==null && generateInvoiceDTO.getTotalSGSTAmount()==null)
 		      {
 		    	  totalGSTAmount = generateInvoiceDTO.getTotalCGSTAmount();
+		    	  toalgstAmount = String.valueOf(generateInvoiceDTO.getTotalCGSTAmount())+"0"+"\n"
+						  +""+"\n"
+						  +"";
 		      }
 		      
 		      else if(generateInvoiceDTO.getTotalCGSTAmount()!=null && generateInvoiceDTO.getTotalIGSTAmount()!=null && generateInvoiceDTO.getTotalSGSTAmount()==null)
 		      {
 		    	  totalGSTAmount = generateInvoiceDTO.getTotalCGSTAmount()+ generateInvoiceDTO.getTotalIGSTAmount();
+		    	  toalgstAmount = String.valueOf(generateInvoiceDTO.getTotalCGSTAmount())+"0"+"\n"
+						  +""+"\n"
+						  +String.valueOf(generateInvoiceDTO.getTotalIGSTAmount())+"0";
 		      }
 		      
 		      else if(generateInvoiceDTO.getTotalCGSTAmount()!=null && generateInvoiceDTO.getTotalIGSTAmount()!=null && generateInvoiceDTO.getTotalSGSTAmount()!=null) {
 		    	  
 		    	  totalGSTAmount = generateInvoiceDTO.getTotalCGSTAmount()+ generateInvoiceDTO.getTotalIGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount();
+		    	  toalgstAmount = String.valueOf(generateInvoiceDTO.getTotalCGSTAmount())+"0"+"\n"
+						  +String.valueOf(generateInvoiceDTO.getTotalSGSTAmount())+"0"+"\n"
+						  +String.valueOf(generateInvoiceDTO.getTotalIGSTAmount())+"0";
 		      }
 		      
 		      else if(generateInvoiceDTO.getTotalCGSTAmount()==null && generateInvoiceDTO.getTotalIGSTAmount()!=null && generateInvoiceDTO.getTotalSGSTAmount()==null)
 		      {
 		    	  totalGSTAmount = generateInvoiceDTO.getTotalIGSTAmount();
+		    	  toalgstAmount = ""+"\n"
+						  +""+"\n"
+						  +String.valueOf(generateInvoiceDTO.getTotalIGSTAmount())+"0";
 		      }
 		      
-			  table3.addCell(String.valueOf(totalGSTAmount));	
+			  table3.addCell(toalgstAmount);	
 			  
 			  Float totalInvoiceAmount = generateInvoiceDTO.getTotalAmount()+totalGSTAmount;
 			  
@@ -919,9 +947,8 @@ public class IANSAccoutingController {
 		    
 		      Cell column13 = new Cell();       
 		      column13.add("Amount"); 
-			  table3.addCell(String.valueOf(totalInvoiceAmount));	
-			  
-		      
+			  table3.addCell(String.valueOf(Float.valueOf(df.format(totalInvoiceAmount)))+"0");	
+		      System.out.println("Float.valueOf(df.format(totalInvoiceAmount))::"+Float.valueOf(df.format(totalInvoiceAmount)));
 		      
 		      Cell cellnewtab1 = new Cell();       
 		      cellnewtab1.add("Bill To:"); 

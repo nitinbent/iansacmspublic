@@ -20,6 +20,7 @@ public class RenewService implements Serializable{
 	private String subscriptionDate;
 	private String serviceStartDate;
 	private String serviceEndDate;
+	private String sacCode;
 	private Integer serviceId;
 	private String subscriptionValue;
 	private String serviceDescription;
@@ -108,6 +109,12 @@ public class RenewService implements Serializable{
 	}
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+	public String getSacCode() {
+		return sacCode;
+	}
+	public void setSacCode(String sacCode) {
+		this.sacCode = sacCode;
 	}
 
 

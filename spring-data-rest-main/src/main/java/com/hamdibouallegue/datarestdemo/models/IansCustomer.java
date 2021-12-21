@@ -51,9 +51,24 @@ public class IansCustomer implements Serializable {
 	@Column(name="LOGIN_ID")
 	private String loginId;
 	
-	@Column(name="HEADOFFICE_ADDRESS")
-	private String headOfficeAddress;
-
+	@Column(name="HEADOFFICE_ADDRESS_LINE1")
+	private String headOfficeAddressLine1;
+	
+	@Column(name="HEADOFFICE_ADDRESS_LINE2")
+	private String headOfficeAddressLine2;
+	
+	@Column(name="HEADOFFICE_ADDRESS_LINE3")
+	private String headOfficeAddressLine3;
+	
+	@Column(name="HEADOFFICE_ADDRESS_LINE4")
+	private String headOfficeAddressLine4;
+	
+	@Column(name="HEADOFFICE_ADDRESS_LINE5")
+	private String headOfficeAddressLine5;
+	
+	@Column(name="HEADOFFICE_ADDRESS_LINE6")
+	private String headOfficeAddressLine6;
+	
 	@Column(name="HEADOFFICE_EMAIL_ID")
 	private String headOfficeEmailId;
 
@@ -270,13 +285,7 @@ public class IansCustomer implements Serializable {
 	 * return iansInvoice; }
 	 */
 
-	public String getHeadOfficeAddress() {
-		return headOfficeAddress;
-	}
 
-	public void setHeadOfficeAddress(String headOfficeAddress) {
-		this.headOfficeAddress = headOfficeAddress;
-	}
 
 	public String getHeadOfficeEmailId() {
 		return headOfficeEmailId;
@@ -308,6 +317,54 @@ public class IansCustomer implements Serializable {
 
 	public void setIansSubscription(IansSubscription iansSubscription) {
 		this.iansSubscription = iansSubscription;
+	}
+
+	public String getHeadOfficeAddressLine1() {
+		return headOfficeAddressLine1;
+	}
+
+	public void setHeadOfficeAddressLine1(String headOfficeAddressLine1) {
+		this.headOfficeAddressLine1 = headOfficeAddressLine1;
+	}
+
+	public String getHeadOfficeAddressLine2() {
+		return headOfficeAddressLine2;
+	}
+
+	public void setHeadOfficeAddressLine2(String headOfficeAddressLine2) {
+		this.headOfficeAddressLine2 = headOfficeAddressLine2;
+	}
+
+	public String getHeadOfficeAddressLine3() {
+		return headOfficeAddressLine3;
+	}
+
+	public void setHeadOfficeAddressLine3(String headOfficeAddressLine3) {
+		this.headOfficeAddressLine3 = headOfficeAddressLine3;
+	}
+
+	public String getHeadOfficeAddressLine4() {
+		return headOfficeAddressLine4;
+	}
+
+	public void setHeadOfficeAddressLine4(String headOfficeAddressLine4) {
+		this.headOfficeAddressLine4 = headOfficeAddressLine4;
+	}
+
+	public String getHeadOfficeAddressLine5() {
+		return headOfficeAddressLine5;
+	}
+
+	public void setHeadOfficeAddressLine5(String headOfficeAddressLine5) {
+		this.headOfficeAddressLine5 = headOfficeAddressLine5;
+	}
+
+	public String getHeadOfficeAddressLine6() {
+		return headOfficeAddressLine6;
+	}
+
+	public void setHeadOfficeAddressLine6(String headOfficeAddressLine6) {
+		this.headOfficeAddressLine6 = headOfficeAddressLine6;
 	}
 
 	
