@@ -26,7 +26,14 @@ public class GenerateInvoiceDTO implements Serializable{
 	private String sacCode;
 	
 	private String companyName;
-	private String headOfficeAddress;
+	
+	private String headOfficeAddressLine1;
+	private String headOfficeAddressLine2;
+	private String headOfficeAddressLine3;
+	private String headOfficeAddressLine4;
+	private String headOfficeAddressLine5;
+	private String headOfficeAddressLine6;
+	
 	private String gstNo;
 	
 	public Integer getInvoiceId() {
@@ -107,12 +114,7 @@ public class GenerateInvoiceDTO implements Serializable{
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	public String getHeadOfficeAddress() {
-		return headOfficeAddress;
-	}
-	public void setHeadOfficeAddress(String headOfficeAddress) {
-		this.headOfficeAddress = headOfficeAddress;
-	}
+
 	public String getGstNo() {
 		return gstNo;
 	}
@@ -138,6 +140,41 @@ public class GenerateInvoiceDTO implements Serializable{
 		this.sacCode = sacCode;
 	}
 	
-	
+	public String getHeadOfficeAddressLine1() {
+		return headOfficeAddressLine1;
+	}
+	public void setHeadOfficeAddressLine1(String headOfficeAddressLine1) {
+		this.headOfficeAddressLine1 = headOfficeAddressLine1;
+	}
+	public String getHeadOfficeAddressLine2() {
+		return headOfficeAddressLine2;
+	}
+	public void setHeadOfficeAddressLine2(String headOfficeAddressLine2) {
+		this.headOfficeAddressLine2 = headOfficeAddressLine2;
+	}
+	public String getHeadOfficeAddressLine3() {
+		return headOfficeAddressLine3;
+	}
+	public void setHeadOfficeAddressLine3(String headOfficeAddressLine3) {
+		this.headOfficeAddressLine3 = headOfficeAddressLine3;
+	}
+	public String getHeadOfficeAddressLine4() {
+		return headOfficeAddressLine4;
+	}
+	public void setHeadOfficeAddressLine4(String headOfficeAddressLine4) {
+		this.headOfficeAddressLine4 = headOfficeAddressLine4;
+	}
+	public String getHeadOfficeAddressLine5() {
+		return headOfficeAddressLine5;
+	}
+	public void setHeadOfficeAddressLine5(String headOfficeAddressLine5) {
+		this.headOfficeAddressLine5 = headOfficeAddressLine5;
+	}
+	public String getHeadOfficeAddressLine6() {
+		return headOfficeAddressLine6;
+	}
+	public void setHeadOfficeAddressLine6(String headOfficeAddressLine6) {
+		this.headOfficeAddressLine6 = headOfficeAddressLine6;
+	}
 
 }
