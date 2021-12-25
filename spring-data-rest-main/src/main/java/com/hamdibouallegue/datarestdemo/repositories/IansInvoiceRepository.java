@@ -22,4 +22,6 @@ public interface IansInvoiceRepository extends JpaRepository<IansInvoice, Intege
     
     IansInvoice findByInvoiceId(int invoiceId);
     
+    List<IansInvoice> findAllByOrderByCreatedAtDesc();
+    
 }

@@ -181,7 +181,9 @@ public class IANSAccoutingController {
 	   	 
 	   	   try {
  
-	   		          List<IansInvoice> invoices = iansInvoiceRepository.findAll();
+	   		          //List<IansInvoice> invoices = iansInvoiceRepository.findAll();
+	   		          
+	   		          List<IansInvoice> invoices = iansInvoiceRepository.findAllByOrderByCreatedAtDesc();
 	   				   
 	   				   if(invoices!=null)
 	   				   {
@@ -293,6 +295,7 @@ public class IANSAccoutingController {
 	 		  
 	 		  // Sent by Virendra
 	 		  
+	 		   
 	 		  invoice.setSubscriptionStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate()));
               invoice.setSubscriptionDate(new SimpleDateFormat("yyyy-MM-dd").parse(createInvoice.getSubscriptionDate()));
               
@@ -870,7 +873,7 @@ public class IANSAccoutingController {
 			 
 			 Cell table1Column1 = new Cell();       
 			 table1Column1.add("Address Line 1"); 
-			 table1.addCell(generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine1()).setTextAlignment(TextAlignment.LEFT).setFontSize(8);	
+			 table1.addCell(generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine2()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine3()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine4()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine5()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine6()).setTextAlignment(TextAlignment.LEFT).setFontSize(8);	
 			 table1Column1.setBorder(Border.NO_BORDER);
 
 			 
