@@ -72,11 +72,11 @@ public class IansInvoice implements Serializable {
 	private Date subscriptionDate;
 	
 	@Column(name="SERVICE_START_DATE")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "Asia/Kolkata")
 	private Date serviceStartDate;
 
 	@Column(name="SERVICE_END_DATE")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "Asia/Kolkata")
 	private Date serviceEndDate;
 	
 

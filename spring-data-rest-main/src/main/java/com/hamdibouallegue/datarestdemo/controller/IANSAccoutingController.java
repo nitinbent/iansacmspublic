@@ -963,8 +963,8 @@ public class IANSAccoutingController {
 		      Cell column2 = new Cell();       
 		      column2.add("DESCRIPTION"); 
 		     // table3.addCell(generateInvoiceDTO.getServiceDescription()).setFontSize(10);		
-		      table3.addCell("SUBSCRIPTION CHARGES FOR "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF "+IANSDateUtils.convertIntoWordDate("dd/MM/yyyy", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionStartDate())+" TO "+IANSDateUtils.convertIntoWordDate("yyyy-MM-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionDate())+"\n\n\n\n\n"+"SAC CODE-"+generateInvoiceDTO.getSacCode()).setFontSize(9);
-		      
+		     // table3.addCell("SUBSCRIPTION CHARGES FOR "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF "+IANSDateUtils.convertIntoWordDate("yyyy-MM-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionStartDate())+" TO "+IANSDateUtils.convertIntoWordDate("yyyy-MM-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionDate())+"\n\n\n\n\n"+"SAC CODE-"+generateInvoiceDTO.getSacCode()).setFontSize(9);
+		      table3.addCell("SUBSCRIPTION CHARGES FOR "+generateInvoiceDTO.getServiceDescription()+" FOR THE PERIOD OF "+IANSDateUtils.convertIntoWordDate("yyyy-MM-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionStartDate())+" TO "+IANSDateUtils.convertIntoWordDate("yyyy-MM-dd", "dd MMMM yyyy", generateInvoiceDTO.getSubscriptionDate())+"\n\n\n\n\n"+"SAC CODE-"+generateInvoiceDTO.getSacCode()).setFontSize(9);
 		 	
 		      Cell column3 = new Cell();       
 		      column3.add("Amount"); 
