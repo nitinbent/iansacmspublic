@@ -16,12 +16,15 @@ public class TestDate {
 		 * System.out.println(month_name);
 		 */
 		
-		String inputDate = "2022-01-06"; 
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH); DateTimeFormatter
-		dtf2 = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH); 
-		LocalDate ld = LocalDate.parse(inputDate, dtf); 
-		String month_name = dtf2.format(ld);
-		System.out.println(month_name);
+		/*
+		 * String inputDate = "2022-01-06"; DateTimeFormatter dtf =
+		 * DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH); DateTimeFormatter
+		 * dtf2 = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH); LocalDate
+		 * ld = LocalDate.parse(inputDate, dtf); String month_name = dtf2.format(ld);
+		 * System.out.println(month_name);
+		 */
+		
+		System.out.println(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH)));
 		
 	}
 

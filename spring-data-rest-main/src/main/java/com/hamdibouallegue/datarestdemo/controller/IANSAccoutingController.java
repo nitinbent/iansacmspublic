@@ -10,10 +10,12 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -842,7 +844,7 @@ public class IANSAccoutingController {
 
 			
 			
-			String para9 = "For IANS INDIA PRIVATE LIMITED";
+			String para9 = "\n\n\n"+"For IANS INDIA PRIVATE LIMITED"+"\n\n\n\n\n\n\n";
 			
 			String para10 = "TERMS OF PAYMENTS";
 			String para11 = "1. Bills are payable on presentation";
@@ -873,14 +875,14 @@ public class IANSAccoutingController {
 			 
 			 Cell table1Column1 = new Cell();       
 			 table1Column1.add("Address Line 1"); 
-			 table1.addCell(generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine2()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine3()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine4()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine5()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine6()).setTextAlignment(TextAlignment.LEFT).setFontSize(8);	
+			 table1.addCell(generateInvoiceDTO.getCompanyName()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine1()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine2()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine3()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine4()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine5()+"\n"+generateInvoiceDTO.getHeadOfficeAddressLine6()).setTextAlignment(TextAlignment.LEFT).setFontSize(8);	
 			 table1Column1.setBorder(Border.NO_BORDER);
 
 			 
 			 
 			 Cell table1Column2 = new Cell();       
 			 table1Column2.add("Invoice No"); 
-			 table1.addCell(generateInvoiceDTO.getInvoiceNo()+"\n"+"Date::"+LocalDate.now()).setTextAlignment(TextAlignment.LEFT).setFontSize(8);
+			 table1.addCell(generateInvoiceDTO.getInvoiceNo()+"\n"+"Date::"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH))).setTextAlignment(TextAlignment.LEFT).setFontSize(8);
 			 table1Column2.setBorder(Border.NO_BORDER);
 
 			 
@@ -1016,6 +1018,13 @@ public class IANSAccoutingController {
 		    	  toalgstAmount = ""+"\n"
 						  +""+"\n"
 						  +String.valueOf(generateInvoiceDTO.getTotalIGSTAmount())+"0";
+		      }
+		      
+		      else if(generateInvoiceDTO.getTotalCGSTAmount()!=null && generateInvoiceDTO.getTotalIGSTAmount()==null && generateInvoiceDTO.getTotalSGSTAmount()!=null)
+		      {
+		    	  totalGSTAmount = generateInvoiceDTO.getTotalCGSTAmount()+generateInvoiceDTO.getTotalSGSTAmount();
+		    	  toalgstAmount = String.valueOf(generateInvoiceDTO.getTotalCGSTAmount())+"0"+"\n"
+						  +String.valueOf(generateInvoiceDTO.getTotalSGSTAmount())+"0";
 		      }
 		      
 			  table3.addCell(toalgstAmount);	
