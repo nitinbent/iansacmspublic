@@ -576,8 +576,7 @@ public class IANSAccoutingController {
 		        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 	            ZipOutputStream zipOutputStream = new ZipOutputStream(byteOutputStream);
 
-		      // ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
-		       List<File> files = new ArrayList<>();
+		        List<File> files = new ArrayList<>();
 		       
 				try {
 							
@@ -618,9 +617,7 @@ public class IANSAccoutingController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-		       
-		       
-		       
+
 			   
 		   }
 	   
@@ -827,9 +824,9 @@ public class IANSAccoutingController {
 			
 			String para2 = "IANS INDIA PRIVATE LIMITED";
 			
-			String para15 = "UP CODE -09                                                                                                         CIN-U74899DLI994PTC063783";
+			String para15 = "UP CODE -09                                                                                                         CIN-U74899DL1994PTC063783";
 			
-			String para3 = "A-6,Ground Floor,Sector - 16,Noida – 201301. U.P. INDIA";
+			String para3 = "A-6, Ground Floor, Sector - 16, Noida – 201301. U.P. INDIA";
 			
 			String para4 = "Tel. : +91-120-4822400. Fax : +91-120-4822403/04";
 			

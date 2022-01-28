@@ -117,13 +117,13 @@ public class NumberInWords {
 	    
 	    private static String convertMilions(int number) {
 	        
-	        int million = number / 1000000;
+	        int million = number / 100000;
 	        
 	        String millionResult = "";
 	        
-	        millionResult = convertNumberToWords(million) + " Million";
+	        millionResult = convertNumberToWords(million) + " Lakhs";
 	        
-	        int remaining = number % 1000000;
+	        int remaining = number % 100000;
 
 	        if (remaining != 0) {
 	            
@@ -137,13 +137,13 @@ public class NumberInWords {
 	    
 	    private static String convertBilions(int number) {
 	        
-	        int billion = number / 1000000000;
+	        int billion = number / 10000000;
 	        
 	        String billionResult = "";
 	        
-	        billionResult = convertNumberToWords(billion) + " Billion";
+	        billionResult = convertNumberToWords(billion) + " Crores";
 	        
-	        int remaining = number % 1000000000;
+	        int remaining = number % 10000000;
 
 	        if (remaining != 0) {
 	            
