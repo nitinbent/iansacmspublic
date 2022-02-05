@@ -65,10 +65,12 @@ public class IansInvoice implements Serializable {
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="SUBCRIPTION_START_DATE")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "Asia/Kolkata")
 	private Date subscriptionStartDate;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="SUBCRIPTION_DATE")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "Asia/Kolkata")
 	private Date subscriptionDate;
 	
 	@Column(name="SERVICE_START_DATE")
@@ -79,6 +81,10 @@ public class IansInvoice implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "Asia/Kolkata")
 	private Date serviceEndDate;
 	
+	@Temporal(TemporalType.DATE)
+	@Column(name="INVOICE_DATE")
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "Asia/Kolkata")
+	private Date invoiceDate;
 
 	@Column(name="PAYMENT_GWAY_TRANSACTION_ID")
 	private String paymentGwayTransactionId;
@@ -312,6 +318,14 @@ public class IansInvoice implements Serializable {
 
 	public void setSubscriptionStartDate(Date subscriptionStartDate) {
 		this.subscriptionStartDate = subscriptionStartDate;
+	}
+
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
+
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
 	}
 
 	/*

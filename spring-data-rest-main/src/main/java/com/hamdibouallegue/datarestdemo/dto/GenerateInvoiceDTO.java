@@ -35,6 +35,8 @@ public class GenerateInvoiceDTO implements Serializable{
 	private String headOfficeAddressLine6;
 	
 	private String gstNo;
+	private String invoiceDate;
+
 	
 	public Integer getInvoiceId() {
 		return invoiceId;
@@ -175,6 +177,12 @@ public class GenerateInvoiceDTO implements Serializable{
 	}
 	public void setHeadOfficeAddressLine6(String headOfficeAddressLine6) {
 		this.headOfficeAddressLine6 = headOfficeAddressLine6;
+	}
+	public String getInvoiceDate() {
+		return invoiceDate;
+	}
+	public void setInvoiceDate(String invoiceDate) {
+		this.invoiceDate = invoiceDate;
 	}
 
 }

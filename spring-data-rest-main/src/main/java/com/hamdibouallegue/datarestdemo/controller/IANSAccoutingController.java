@@ -62,7 +62,6 @@ import com.hamdibouallegue.datarestdemo.utils.NumberInWords;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -298,9 +297,20 @@ public class IANSAccoutingController {
 	 		  // Sent by Virendra
 	 		  
 	 		   
-	 		  invoice.setSubscriptionStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate()));
-              invoice.setSubscriptionDate(new SimpleDateFormat("yyyy-MM-dd").parse(createInvoice.getSubscriptionDate()));
+	 		  invoice.setSubscriptionStartDate(new SimpleDateFormat("yyyy-MM-dd").parse(createInvoice.getSubscriptionStartDate()));
+              //invoice.setSubscriptionDate(new SimpleDateFormat("yyyy-MM-dd").parse(createInvoice.getSubscriptionDate()));
               
+	 		  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	 		  
+	 		   LocalDate invoiceSubscriptionStartDate = LocalDate.parse(createInvoice.getSubscriptionStartDate(),formatter);
+
+	 		
+	 		   
+	 		   LocalDate subscriptionMonths = invoiceSubscriptionStartDate.plusMonths(createInvoice.getSubscriptionValue()).minusDays(1);
+		 		  
+	 		   invoice.setSubscriptionDate(Date.from(subscriptionMonths.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+	 		   
+	 		  
 	 		   
 	 		   //Put Invoice from invoice table itself.
 	 		   //invoice.setInvoiceNo(String.format("%04d", new java.util.Random().nextInt(10000))+"_"+ Calendar.YEAR+"_"+createInvoice.getCustomerId());
@@ -317,7 +327,8 @@ public class IANSAccoutingController {
 	 		  invoice.setServiceDescription(createInvoice.getServiceDescription());
 	 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceStartDate())); 
 	 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getServiceEndDate()));
-	 		   
+	 		  invoice.setInvoiceDate(new SimpleDateFormat("dd/MM/yyyy").parse(createInvoice.getInvoiceDate()));
+
 	 		   
 	 		   invoice = iansInvoiceRepository.save(invoice);
 	 		   
@@ -338,6 +349,7 @@ public class IANSAccoutingController {
 	 			    
 	 			      Map<String,Object> map = new HashMap<>();
 	 			      map.put("invoiceNo", invoice.getInvoiceNo());
+	 			      map.put("subscriptionDate", new SimpleDateFormat("yyyy-MM-dd").format(invoice.getSubscriptionDate()));
                       return ResponseEntity.status(HttpStatus.CREATED).body(map);
 				    
 	 		   }
@@ -861,7 +873,7 @@ public class IANSAccoutingController {
 			 
 			 Cell table1Column0 = new Cell();       
 			 table1Column0.add("Header 1"); 
-			 table1.addCell("Customer Address").setTextAlignment(TextAlignment.LEFT).setFontSize(8);	
+			 table1.addCell("Bill To").setTextAlignment(TextAlignment.LEFT).setFontSize(8);	
 			 table1Column0.setBorder(Border.NO_BORDER);
 
 			 Cell table1Column00 = new Cell();       
@@ -879,7 +891,7 @@ public class IANSAccoutingController {
 			 
 			 Cell table1Column2 = new Cell();       
 			 table1Column2.add("Invoice No"); 
-			 table1.addCell(generateInvoiceDTO.getInvoiceNo()+"\n"+"Date::"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH))).setTextAlignment(TextAlignment.LEFT).setFontSize(8);
+			 table1.addCell(generateInvoiceDTO.getInvoiceNo()+"\n"+"Date::"+generateInvoiceDTO.getInvoiceDate()).setTextAlignment(TextAlignment.LEFT).setFontSize(8);
 			 table1Column2.setBorder(Border.NO_BORDER);
 
 			 
