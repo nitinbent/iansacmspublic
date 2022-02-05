@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hamdibouallegue.datarestdemo.dto.CreateInvoice;
 import com.hamdibouallegue.datarestdemo.dto.DownloadInvoiceDTO;
 import com.hamdibouallegue.datarestdemo.dto.GenerateInvoiceDTO;
+import com.hamdibouallegue.datarestdemo.dto.InvoiceService;
 import com.hamdibouallegue.datarestdemo.dto.LoginRequest;
 import com.hamdibouallegue.datarestdemo.dto.RenewInvoice;
 import com.hamdibouallegue.datarestdemo.dto.UpdateInvoice;
@@ -422,7 +423,9 @@ public class IANSAccoutingController {
 		 		  invoice.setServiceDescription(renewInvoice.getRenewServices().get(i).getServiceDescription());
 		 		  invoice.setServiceStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getServiceStartDate())); 
 		 		  invoice.setServiceEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(renewInvoice.getRenewServices().get(i).getServiceEndDate()));
+                  invoice.setInvoiceDate(invoice.getSubscriptionStartDate());
 
+                  
 		 		  invoice = iansInvoiceRepository.save(invoice);
 		 		  
 	 			   

@@ -1,8 +1,11 @@
 package com.hamdibouallegue.datarestdemo;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
 
 import com.hamdibouallegue.datarestdemo.utils.IANSDateUtils;
@@ -20,23 +23,24 @@ public class TestDate {
 		 */
 		
 		
-		  try {
-			String inputDate = "2022-02-28"; 
-			  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH); 
-			  DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH); 
-			  LocalDate ld = LocalDate.parse(inputDate, dtf); 
-			  String month_name = dtf2.format(ld);
-			  System.out.println(month_name);
-			 
-			  System.out.println(IANSDateUtils.convertIntoWordDate("yyyy-MM-dd", "dd MMMM yyyy", "2022-02-28"));
-			  
-			  
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/*
+		 * try { String inputDate = "2022-02-28"; DateTimeFormatter dtf =
+		 * DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH); DateTimeFormatter
+		 * dtf2 = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.ENGLISH); LocalDate
+		 * ld = LocalDate.parse(inputDate, dtf); String month_name = dtf2.format(ld);
+		 * System.out.println(month_name);
+		 * 
+		 * System.out.println(IANSDateUtils.convertIntoWordDate("yyyy-MM-dd",
+		 * "dd MMMM yyyy", "2022-02-28"));
+		 * 
+		 * 
+		 * } catch (ParseException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
 		
 		//System.out.println(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH)));
+		
+		System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()));
 		
 	}
 
